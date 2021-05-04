@@ -15,6 +15,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+//Auth::routes();
+Auth::routes([
+    'register' => false,
+]);
+Route::get('/adduser', 'Auth\AddUserController@index')->name('adduser');
+Route::post('/adduser/adduser', 'Auth\AddUserController@create')->name('adduser.create');
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+//ekstrakurikuler
+Route::get('/ekstrakurikuler/create_page','EkskulController@create_page');
+Route::post('/ekstrakurikuler/create','EkskulController@create_ekskul')->name('ekskul.create');

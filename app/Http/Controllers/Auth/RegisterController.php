@@ -7,6 +7,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Registered;
+
 
 class RegisterController extends Controller
 {
@@ -28,7 +31,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/homepage/homeAdmin';
 
     /**
      * Create a new controller instance.
@@ -50,9 +53,10 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'firstname' => ['required', 'string', 'max:255'],
-            'lasstname' => ['required', 'string', 'max:255'],
+            'lastname' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:12', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'role' => ['required'],
         ]);
     }
 
@@ -66,9 +70,19 @@ class RegisterController extends Controller
     {
         return User::create([
             'firstname' => $data['firstname'],
-            'laststname' => $data['lastname'],
+            'lastname' => $data['lastname'],
             'username' => $data['username'],
             'password' => Hash::make($data['password']),
+            'role' => $data['role']
         ]);
     }
+
+    public function register(Request $request){
+        $this->validator($request->all())->validate();
+        event(new Registered($user = $this->create($request->all())));
+
+        return $this->registered($request, $user)
+            ?: redirect()->back();
+    }
+
 }

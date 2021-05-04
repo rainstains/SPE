@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'firstname', 'lastname', 'username', 'password',
+        'firstname', 'lastname', 'username', 'password', 'role', 'ekskul_ids'
     ];
 
     /**
@@ -36,4 +36,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function ekstrakurikuler(){
+        return $this->belongsTo('App\Ekstrakurikuler');
+    }
 }
