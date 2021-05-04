@@ -16,4 +16,8 @@ class Ekstrakurikuler extends Model
         return $this->hasMany('App\User');
     }
 
+    public function siswa(){
+        return $this->belongsToMany('App\Siswa')->using('App\Anggota')->withPivot('status','angkatan');
+    }
+
 }
