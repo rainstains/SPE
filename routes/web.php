@@ -10,10 +10,12 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+/*
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth/login');
 });
+*/
+Route::get('/', 'HomeController@index');
 
 //Auth::routes();
 Auth::routes([
@@ -27,3 +29,4 @@ Route::get('/home', 'HomeController@index')->name('home');
 //ekstrakurikuler
 Route::get('/ekstrakurikuler/create_page','EkskulController@create_page');
 Route::post('/ekstrakurikuler/create','EkskulController@create_ekskul')->name('ekskul.create');
+Route::post('/ekstrakurikuler/delete','EkskulController@delete_ekskul')->name('ekskul.delete');

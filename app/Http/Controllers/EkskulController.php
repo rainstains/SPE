@@ -23,9 +23,9 @@ class EkskulController extends Controller
         ]);
 
         $logo = $request->file('logo');
-        $filename = "logo_".$request->namaEkskul;
+        $filename = "logo_".$request->namaEkskul."_".$logo->getClientOriginalName();
 
-        $dir_upload = "uploaded_files"."/"."Ekstrakurikuler/".$request->namaEkskul."logo/";
+        $dir_upload = "uploaded_files"."/"."Ekstrakurikuler/".$request->namaEkskul."/logo/";
         $logo->move($dir_upload, $filename);
 
         $ekskul = Ekstrakurikuler::create([
@@ -34,6 +34,14 @@ class EkskulController extends Controller
             'logo' => $filename
         ]);
 
+        return Redirect::back();
+    }
+
+    public function delete_ekskul(Request $request){
+        $ekskul = Ekstrakurikuler::find($request->id);
+        $ekskul->delete();
+        $dir_upload = "uploaded_files"."/"."Ekstrakurikuler/".$request->namaEkskul;
+        File::deleteDirectory(public_path($dir_upload));
         return Redirect::back();
     }
 }

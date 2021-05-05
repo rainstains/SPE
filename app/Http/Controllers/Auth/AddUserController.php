@@ -21,6 +21,11 @@ class AddUserController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'role' => ['required'],
         ]);
+        if($request->role == "Kesiswaan"){
+            $ekskul_id = NULL;
+        }else{
+            $ekskul_id =$request->ekskul_id;
+        }
 
         $user = User::create([
             'firstname' => $request->firstname,
@@ -28,7 +33,7 @@ class AddUserController extends Controller
             'username' => $request->username,
             'password' => Hash::make($request->password),
             'role' => $request->role,
-            'ekskul_id' => $request->ekskul_id,
+            'ekskul_id' => $ekskul_id,
         ]);
 
         return Redirect::back();

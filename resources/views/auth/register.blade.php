@@ -111,6 +111,9 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scriptplus')
 <script>
 $(document).ready(function () {
     $('#role').on('change',function(){
