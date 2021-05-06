@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Auth;
-use App\Ekstrakurikuler;
+use App\Extracurricular;
+use App\Student;
 
 class HomeController extends Controller
 {
@@ -26,16 +27,17 @@ class HomeController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $ekskuls = Ekstrakurikuler::all();
-        $ekskul = Ekstrakurikuler::find($user->ekskul_id);
+        $students = Student::all();
+        $extracurriculars = Extracurricular::all();
+        $extracurricular = Extracurricular::find($user->extracurricular_id);
         
         if($user->role == "ADMIN"){
-            return view('homepage/homeAdmin',compact('ekskuls'));
+            return view('homepage/homeAdmin',compact('extracurriculars'));
         }
         else if($user->role == "Kesiswaan"){
-            return view('homepage/homeKesiswaan',compact('ekskuls'));
+            return view('homepage/homeKesiswaan',compact('extracurriculars','user'));
         }else{
-            return view('homepage/home',compact('ekskul','user'));
+            return view('homepage/home',compact('extracurricular','user','students'));
         }
         
     }

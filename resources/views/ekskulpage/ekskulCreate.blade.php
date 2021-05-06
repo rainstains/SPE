@@ -12,12 +12,12 @@
                         @csrf
 
                         <div class="form-group row">
-                            <label for="firstname" class="col-md-4 col-form-label text-md-right">{{ __('Nama Ekstrakurikuler') }}</label>
+                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Nama Ekstrakurikuler') }}</label>
 
                             <div class="col-md-6">
-                                <input id="namaEkskul" type="text" class="form-control @error('namaEkskul') is-invalid @enderror" name="namaEkskul" value="{{ old('namaEkskul') }}" required autocomplete="namaEkskul" autofocus>
+                                <input id="name" type="text" class="form-control @error('namaEkskul') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
 
-                                @error('namaEkskul')
+                                @error('name')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -26,12 +26,12 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="username" class="col-md-4 col-form-label text-md-right">{{ __('Tanggal Berdiri') }}</label>
+                            <label for="dateEstablished" class="col-md-4 col-form-label text-md-right">{{ __('Tanggal Berdiri') }}</label>
 
                             <div class="col-md-6">
-                                <input id="tglBerdiri" type="date" class="form-control @error('tglBerdiri') is-invalid @enderror" name="tglBerdiri" value="{{ old('tglBerdiri') }}" required autocomplete="tglBerdiri">
+                                <input id="dateEstablished" type="date" class="form-control @error('dateEstablished') is-invalid @enderror" name="dateEstablished" value="{{ old('dateEstablished') }}" required autocomplete="dateEstablished">
 
-                                @error('tglBerdiri')
+                                @error('dateEstablished')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>

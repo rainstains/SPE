@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEkstrakurikulerTable extends Migration
+class CreateExtracurricularsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateEkstrakurikulerTable extends Migration
      */
     public function up()
     {
-        Schema::create('ekstrakurikuler', function (Blueprint $table) {
+        Schema::create('extracurriculars', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('namaEkskul');
-            $table->Date('tglBerdiri');
+            $table->string('name');
+            $table->Date('dateEstablished');
             $table->binary('logo');
+            $table->string('status')->default('Active');
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ class CreateEkstrakurikulerTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ekstrakurikuler');
+        Schema::dropIfExists('extracurriculars');
     }
 }

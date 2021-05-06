@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\User;
-use App\Ekstrakurikuler;
+use App\Extracurricular;
 use Redirect;
 
 class AddUserController extends Controller
@@ -22,25 +22,25 @@ class AddUserController extends Controller
             'role' => ['required'],
         ]);
         if($request->role == "Kesiswaan"){
-            $ekskul_id = NULL;
+            $extracurricular_id = NULL;
         }else{
-            $ekskul_id =$request->ekskul_id;
+            $extracurricular_id =$request->extracurricular_id;
         }
-
+        
         $user = User::create([
             'firstname' => $request->firstname,
             'lastname' => $request->lastname,
             'username' => $request->username,
             'password' => Hash::make($request->password),
             'role' => $request->role,
-            'ekskul_id' => $ekskul_id,
+            'extracurricular_id' => $extracurricular_id,
         ]);
-
+        
         return Redirect::back();
     }
 
     public function index(){
-        $ekskuls = Ekstrakurikuler::all();
-        return view('/auth/register',compact('ekskuls'));
+        $extracurriculars = Extracurricular::all();
+        return view('/auth/register',compact('extracurriculars'));
     }
 }

@@ -16,8 +16,8 @@
 
                     You are logged in! But as a Kesiswaan
                     <ol>
-                    @foreach($ekskuls as $ekskul)
-                        <li>{{$ekskul->namaEkskul}}</li>
+                    @foreach($extracurriculars as $extracurricular)
+                        <li>{{$extracurricular->name}} <p>Status : {{$extracurricular->status}}</p></li>
                     @endforeach
                     </ol>
                 </div>

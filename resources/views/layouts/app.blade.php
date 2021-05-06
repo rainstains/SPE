@@ -22,6 +22,7 @@
 
     <!-- Custom styles for this template-->
     <link href="{{asset('sbadmin/css/sb-admin-2.min.css')}}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
     
 </head>
 <body>
@@ -79,6 +80,9 @@
     <!-- Bootstrap core JavaScript-->
     <script src="{{asset('sbadmin/vendor/jquery/jquery.min.js')}}"></script>
     <script src="{{asset('sbadmin/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
 
     <!-- Core plugin JavaScript-->
     <script src="{{asset('sbadmin/vendor/jquery-easing/jquery.easing.min.js')}}"></script>

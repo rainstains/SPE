@@ -21,12 +21,13 @@ Route::get('/', 'HomeController@index');
 Auth::routes([
     'register' => false,
 ]);
-Route::get('/adduser', 'Auth\AddUserController@index')->name('adduser');
-Route::post('/adduser/adduser', 'Auth\AddUserController@create')->name('adduser.create');
+Route::post('/adduser', 'Auth\AddUserController@create')->name('adduser.create');
 
 Route::get('/home', 'HomeController@index')->name('home');
 
 //ekstrakurikuler
-Route::get('/ekstrakurikuler/create_page','EkskulController@create_page');
-Route::post('/ekstrakurikuler/create','EkskulController@create_ekskul')->name('ekskul.create');
-Route::post('/ekstrakurikuler/delete','EkskulController@delete_ekskul')->name('ekskul.delete');
+Route::post('/extracurricular/create','ExtracurricularController@create_ekskul')->name('ekskul.create');
+Route::post('/extracurricular/update','ExtracurricularController@update_ekskul')->name('ekskul.update');
+Route::post('/extracurricular/status','ExtracurricularController@update_status_ekskul')->name('ekskul.status');
+Route::post('/extracurricular/delete','ExtracurricularController@delete_ekskul')->name('ekskul.delete');
+Route::post('/extracurricular/add_anggota','ExtracurricularController@add_anggota')->name('anggota.add');

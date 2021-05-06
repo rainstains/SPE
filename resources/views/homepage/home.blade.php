@@ -15,11 +15,12 @@
                     @endif
 
                     You are logged in! But as a {{$user->role}}
+                    @if ($extracurricular->status == "Active")
                     <hr>
                     <button id="btnEditEkskul" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalEditEkskul">Edit Ekstrakurikuler</button>
-                    <p>{{$ekskul->namaEkskul}}</p>
-                    <p>{{$ekskul->tglBerdiri}}</p>
-                    <img src="uploaded_files/Ekstrakurikuler/{{$ekskul->namaEkskul}}/logo/{{$ekskul->logo}}" width="200px" height="200px" alt="">
+                    <p>{{$extracurricular->name}}</p>
+                    <p>{{$extracurricular->dateEstablished}}</p>
+                    <img src="uploaded_files/Extracurricular/{{$extracurricular->id}}/logo/{{$extracurricular->logo}}" width="200px" height="200px" alt="">
                     <hr>
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
@@ -39,6 +40,9 @@
                         <button id="btnAddAnggota" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAddAnggota">Add Anggota</button>
                         </div>
                     </div>
+                @else
+                <p>You cannot Access this Ekstrakurikuler page due to InActive Status of {{$extracurricular->name}}</p>
+                @endif
                 </div>
             </div>
         </div>
@@ -58,16 +62,16 @@
       </div>
       <div class="modal-body">
         
-      <form method="POST" action="{{ route('ekskul.create') }}" enctype="multipart/form-data">
+      <form method="POST" action="{{ route('ekskul.update') }}" enctype="multipart/form-data">
         @csrf
 
         <div class="form-group row">
-            <label for="firstname" class="col-md-4 col-form-label text-md-right">{{ __('Nama Ekstrakurikuler') }}</label>
+            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Nama Ekstrakurikuler') }}</label>
 
             <div class="col-md-6">
-                <input id="namaEkskul" type="text" value="{{$ekskul->namaEkskul}}" class="form-control @error('namaEkskul') is-invalid @enderror" name="namaEkskul" value="{{ old('namaEkskul') }}" required autocomplete="namaEkskul" autofocus>
+                <input id="name" type="text" value="{{$extracurricular->name}}" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
 
-                @error('namaEkskul')
+                @error('name')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
@@ -76,12 +80,12 @@
         </div>
 
         <div class="form-group row">
-            <label for="username" class="col-md-4 col-form-label text-md-right">{{ __('Tanggal Berdiri') }}</label>
+            <label for="dateEstablished" class="col-md-4 col-form-label text-md-right">{{ __('Tanggal Berdiri') }}</label>
 
             <div class="col-md-6">
-                <input id="tglBerdiri" type="date" value="{{$ekskul->tglBerdiri}}" class="form-control @error('tglBerdiri') is-invalid @enderror" name="tglBerdiri" value="{{ old('tglBerdiri') }}" required autocomplete="tglBerdiri">
+                <input id="dateEstablished" type="date" value="{{$extracurricular->dateEstablished}}" class="form-control @error('dateEstablished') is-invalid @enderror" name="dateEstablished" value="{{ old('dateEstablished') }}" required autocomplete="dateEstablished">
 
-                @error('tglBerdiri')
+                @error('dateEstablished')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
@@ -93,7 +97,7 @@
             <label for="logo" class="col-md-4 col-form-label text-md-right">{{ __('Logo') }}</label>
 
             <div class="col-md-6">
-                <input id="logo" type="file" class="form-control @error('logo') is-invalid @enderror" name="logo" value="{{ old('logo') }}" required autocomplete="logo">
+                <input id="logo" type="file" class="form-control @error('logo') is-invalid @enderror" name="logo" value="{{ old('logo') }}" autocomplete="logo">
 
                 @error('logo')
                     <span class="invalid-feedback" role="alert">
@@ -102,6 +106,7 @@
                 @enderror
             </div>
         </div>
+        <input id="id" type="hidden" name="id" value="{{$extracurricular->id}}">
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -117,51 +122,57 @@
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add Anggota {{$ekskul->namaEkskul}}</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Add Anggota {{$extracurricular->name}}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         
-      <form method="POST" action="{{ route('ekskul.create') }}" enctype="multipart/form-data">
+      <form method="POST" action="{{ route('anggota.add') }}">
         @csrf
 
         <div class="form-group row">
-            <label for="firstname" class="col-md-4 col-form-label text-md-right">{{ __('Nama Ekstrakurikuler') }}</label>
+            <label for="siswa_id" class="col-md-4 col-form-label text-md-right">{{ __('Nama Calon Anggota') }}</label>
 
             <div class="col-md-6">
-                <input id="namaEkskul" type="text" value="{{$ekskul->namaEkskul}}" class="form-control @error('namaEkskul') is-invalid @enderror" name="namaEkskul" value="{{ old('namaEkskul') }}" required autocomplete="namaEkskul" autofocus>
+                <select name="siswa_id" id="siswa_id" placeholder="Cari Siswa ..." required>
+                @foreach($students as $student)
+                <option value="{{ $student->id}}" data-nis="{{$student->nis}}" data-nama="{{$student->name}}" data-kelas="{{$student->class}}"> {{$student->name}} ({{$student->class}})</option>
+                @endforeach
+                </select>
+            </div>
+            <input id="extracurricular_id" type="hidden" name="extracurricular_id" value="{{$extracurricular->id}}">
+        </div>
+        <h6 style="text-align:center">Detail Data Calon Anggota : </h6>
+        <div class="form-group row">
+            <label for="nis" class="col-md-4 col-form-label text-md-right">No. Induk Siswa</label>
 
-                @error('namaEkskul')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
+            <div class="col-md-6">
+            <p id="nis"></p>
             </div>
         </div>
-
         <div class="form-group row">
-            <label for="username" class="col-md-4 col-form-label text-md-right">{{ __('Tanggal Berdiri') }}</label>
+            <label for="name" class="col-md-4 col-form-label text-md-right">Nama</label>
 
             <div class="col-md-6">
-                <input id="tglBerdiri" type="date" value="{{$ekskul->tglBerdiri}}" class="form-control @error('tglBerdiri') is-invalid @enderror" name="tglBerdiri" value="{{ old('tglBerdiri') }}" required autocomplete="tglBerdiri">
-
-                @error('tglBerdiri')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
+            <p id="nameS"></p>
             </div>
         </div>
-
         <div class="form-group row">
-            <label for="logo" class="col-md-4 col-form-label text-md-right">{{ __('Logo') }}</label>
+            <label for="class" class="col-md-4 col-form-label text-md-right">Kelas</label>
 
             <div class="col-md-6">
-                <input id="logo" type="file" class="form-control @error('logo') is-invalid @enderror" name="logo" value="{{ old('logo') }}" required autocomplete="logo">
+            <p id="class"></p>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="angkatan" class="col-md-4 col-form-label text-md-right">{{ __('Angkatan') }}</label>
 
-                @error('logo')
+            <div class="col-md-6">
+                <input id="angkatan" type="number" class="form-control @error('angkatan') is-invalid @enderror" name="angkatan" value="{{ old('angkatan') }}" required autocomplete="angkatan" autofocus>
+
+                @error('angkatan')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
@@ -171,10 +182,33 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">{{ __('Edit Ekstrakurikuler') }}</button>
+        <button type="submit" class="btn btn-primary">{{ __('Add Anggota') }}</button>
         </form>
       </div>
     </div>
   </div>
 </div>
+@endsection
+
+@section('scriptplus')
+<script>
+    $(document).ready(function () {
+      $('#siswa_id').selectize({
+          onInitialize: function(){
+			var s = this;
+			this.revertSettings.$children.each( function(){
+				   $.extend(s.options[this.value], $(this).data());
+		    });
+		  }
+      });
+    });
+
+    $('#siswa_id').on('change', function(){
+        var s = $('#siswa_id')[0].selectize; 
+        var data = s.options[s.items[0]]; 
+        document.getElementById("nis").innerHTML = ": "+data.nis;
+        document.getElementById("nameS").innerHTML = ": "+data.nama;
+        document.getElementById("class").innerHTML = ": "+data.kelas; 
+    });
+</script>
 @endsection

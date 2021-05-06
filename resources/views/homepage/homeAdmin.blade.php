@@ -15,19 +15,16 @@
                     @endif
 
                     You are logged in!
-                    <br>
-                    <a href="{{ route('adduser') }}">{{ __('Register Akun') }}</a> <br>
                     <button id="btnAddUser" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAddUser">Add User</button>
-                    <br>
-                    <a href="{{ url('ekstrakurikuler/create_page') }}">{{ __('Register Ekstrakurikuler') }}</a><br>
                     <button id="btnAddEkskul" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAddEkskul">Add Ekstrakurikuler</button>
                     <hr>
                     <h5>Daftar Ekskul</h5>
                     <ol>
-                    @foreach($ekskuls as $ekskul)
+                    @foreach($extracurriculars as $extracurricular)
                         <li>
-                            {{ $ekskul->namaEkskul}} 
-                            <button id="btnDelEkskul" type="button" class="btn btn-primary" data-toggle="modal" data-id="{{ $ekskul->id}}" data-nama="{{ $ekskul->namaEkskul}}" data-target="#modalDelEkskul">Delete</button>
+                            {{ $extracurricular->name}} 
+                            <button id="btnDelEkskul" type="button" class="btn btn-primary" data-toggle="modal" data-id="{{ $extracurricular->id}}" data-name="{{ $extracurricular->name}}" data-target="#modalDelEkskul">Delete</button>
+                            <button id="btnStatEkskul" type="button" class="btn btn-primary" data-toggle="modal" data-id="{{ $extracurricular->id}}" data-status="{{ $extracurricular->status}}" data-name="{{ $extracurricular->name}}" data-target="#modalStatEkskul">{{ $extracurricular->status}}</button>
                         </li>
                     @endforeach
                     </ol>
@@ -131,9 +128,9 @@
             <label for="ekskul_id" class="col-md-4 col-form-label text-md-right">{{ __('Ekstrakurikuler') }}</label>
             
             <div class="col-md-6">
-                <select name="ekskul_id" id="ekskul_id" class="form-control">
-                    @foreach($ekskuls as $ekskul)
-                    <option value="{{ $ekskul->id }}">{{ $ekskul->namaEkskul }}</option>
+                <select name="extracurricular_id" id="extracurricular_id" class="form-control">
+                    @foreach($extracurriculars as $extracurricular)
+                    <option value="{{ $extracurricular->id }}">{{ $extracurricular->name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -164,50 +161,47 @@
         @csrf
 
         <div class="form-group row">
-            <label for="firstname" class="col-md-4 col-form-label text-md-right">{{ __('Nama Ekstrakurikuler') }}</label>
+          <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Nama Ekstrakurikuler') }}</label>
 
-            <div class="col-md-6">
-                <input id="namaEkskul" type="text" class="form-control @error('namaEkskul') is-invalid @enderror" name="namaEkskul" value="{{ old('namaEkskul') }}" required autocomplete="namaEkskul" autofocus>
+          <div class="col-md-6">
+              <input id="name" type="text" class="form-control @error('namaEkskul') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
 
-                @error('namaEkskul')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-        </div>
+              @error('name')
+                  <span class="invalid-feedback" role="alert">
+                      <strong>{{ $message }}</strong>
+                  </span>
+              @enderror
+          </div>
+      </div>
 
-        <div class="form-group row">
-            <label for="username" class="col-md-4 col-form-label text-md-right">{{ __('Tanggal Berdiri') }}</label>
+      <div class="form-group row">
+          <label for="dateEstablished" class="col-md-4 col-form-label text-md-right">{{ __('Tanggal Berdiri') }}</label>
 
-            <div class="col-md-6">
-                <input id="tglBerdiri" type="date" class="form-control @error('tglBerdiri') is-invalid @enderror" name="tglBerdiri" value="{{ old('tglBerdiri') }}" required autocomplete="tglBerdiri">
+          <div class="col-md-6">
+              <input id="dateEstablished" type="date" class="form-control @error('dateEstablished') is-invalid @enderror" name="dateEstablished" value="{{ old('dateEstablished') }}" required autocomplete="dateEstablished">
 
-                @error('tglBerdiri')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-        </div>
+              @error('dateEstablished')
+                  <span class="invalid-feedback" role="alert">
+                      <strong>{{ $message }}</strong>
+                  </span>
+              @enderror
+          </div>
+      </div>
 
-        <div class="form-group row">
-            <label for="logo" class="col-md-4 col-form-label text-md-right">{{ __('Logo') }}</label>
+      <div class="form-group row">
+          <label for="logo" class="col-md-4 col-form-label text-md-right">{{ __('Logo') }}</label>
 
-            <div class="col-md-6">
-                <input id="logo" type="file" class="form-control @error('logo') is-invalid @enderror" name="logo" value="{{ old('logo') }}" required autocomplete="logo">
+          <div class="col-md-6">
+              <input id="logo" type="file" class="form-control @error('logo') is-invalid @enderror" name="logo" value="{{ old('logo') }}" required autocomplete="logo">
 
-                @error('logo')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-        </div>
-
+              @error('logo')
+                  <span class="invalid-feedback" role="alert">
+                      <strong>{{ $message }}</strong>
+                  </span>
+              @enderror
+          </div>
+      </div>
                         
-                    
-
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -243,6 +237,35 @@
   </div>
 </div>
 
+<!-- Modal Status Ekskul -->
+<div class="modal fade" id="modalStatEkskul" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Status Ekstrakurikuler</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p id="statusConfirm"></p>
+      <form method="POST" action="{{ route('ekskul.status') }}" >
+        @csrf           
+        <input id="id" type="hidden" name="id" value="">
+        <select id="status" name='status' required>
+            <option value="Active">Active</option>
+            <option value="InActive">InActive</option>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">{{ __('Update Status') }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 @endsection
 
 @section('scriptplus')
@@ -260,10 +283,24 @@ $(document).ready(function () {
 
 $(document).on('click','#btnDelEkskul', function(){
     var id = $(this).data('id');
-    var name = $(this).data('nama');
+    var name = $(this).data('name');
     var p = "are you sure you want to delete "+name+"?";
     $(".modal-body #id").val(id);
     document.getElementById("delConfirm").innerHTML = p;
+});
+
+$(document).on('click','#btnStatEkskul', function(){
+    var id = $(this).data('id');
+    var name = $(this).data('name');
+    var status = $(this).data('status');
+    var p = "Status Ekstrakurikuler "+name+" is "+status+"!";
+    $(".modal-body #id").val(id);
+    if (status === "Active") {
+        document.getElementById("status").selectedIndex = 0;
+    }else if (status === "InActive") {
+        document.getElementById("status").selectedIndex = 1;
+    }
+    document.getElementById("statusConfirm").innerHTML = p;
 });
 </script>
 @endsection

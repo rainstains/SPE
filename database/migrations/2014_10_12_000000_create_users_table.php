@@ -20,8 +20,8 @@ class CreateUsersTable extends Migration
             $table->string('username')->unique();
             $table->string('password');
             $table->string('role');
-            $table->BigInteger('ekskul_id')->nullable()->unsigned();
-            $table->foreign('ekskul_id')->references('id')->on('ekstrakurikuler');
+            $table->BigInteger('extracurricular_id')->nullable()->unsigned();
+            $table->foreign('extracurricular_id')->references('id')->on('extracurriculars')->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
         });
