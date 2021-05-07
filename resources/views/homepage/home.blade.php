@@ -35,18 +35,32 @@
                     </ul>
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade active show" id="kegiatan" role="tabpanel" aria-labelledby="kegiatan-tab">...</div>
-                        <div class="tab-pane fade" id="prestasi" role="tabpanel" aria-labelledby="prestasi-tab">...</div>
+
+                        <div class="tab-pane fade" id="prestasi" role="tabpanel" aria-labelledby="prestasi-tab">
+                          <button id="btnAddPrestasi" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAddPrestasi">Add Prestasi</button>
+                            <ol>
+                                @foreach($achievements as $achievement)
+                                    <li>
+                                        {{$achievement->name}}
+                                        <button id="btnKonfirmasiPrestasi" type="button" class="btn btn-primary" data-toggle="modal" data-id="{{ $achievement->id}}" data-name="{{$achievement->name}}" data-date="{{$achievement->date}}"  data-status="{{$achievement->status}}" data-confirm="{{$achievement->confirm}}" data-target="#modalKonfirmasiPrestasi" >Konfirmasi</button>
+                                        <button id="btnEditPrestasi" type="button" class="btn btn-primary" data-toggle="modal" data-id="{{ $achievement->id}}" data-name="{{$achievement->name}}" data-date="{{$achievement->date}}"  data-status="{{$achievement->status}}" data-confirm="{{$achievement->confirm}}" data-target="#modalEditPrestasi" >Edit</button>
+                                        <button id="btnDelPrestasi" type="button" class="btn btn-primary" data-toggle="modal" data-id="{{ $achievement->id}}" data-name="{{$achievement->name}}"  data-date="{{$achievement->date}}"  data-status="{{$achievement->status}}" data-confirm="{{$achievement->confirm}}" data-target="#modalDelPrestasi">Delete</button>   
+                                    </li>
+                                @endforeach
+                            </ol>
+                          </div>
+
                         <div class="tab-pane fade" id="anggota" role="tabpanel" aria-labelledby="anggota-tab">
-                        <button id="btnAddAnggota" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAddAnggota">Add Anggota</button>
-                        <ol>
-                            @foreach($members as $member)
-                                <li>
-                                    {{$member->student->name}}
-                                    <button id="btnEditAnggota" type="button" class="btn btn-primary" data-toggle="modal" data-id="{{ $member->id}}" data-name="{{$member->student->name}}" data-nis="{{$member->student->nis}}" data-class="{{$member->student->class}}" data-angkatan="{{$member->angkatan}}" data-status="{{$member->status}}" data-target="#modalEditAnggota">Edit</button>
-                                    <button id="btnDelAnggota" type="button" class="btn btn-primary" data-toggle="modal" data-id="{{ $member->id}}" data-name="{{$member->student->name}}" data-nis="{{$member->student->nis}}" data-class="{{$member->student->class}}" data-angkatan="{{$member->angkatan}}" data-status="{{$member->status}}" data-target="#modalDelAnggota">Delete</button>
-                                </li>
-                            @endforeach
-                        </ol>
+                          <button id="btnAddAnggota" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAddAnggota">Add Anggota</button>
+                          <ol>
+                              @foreach($members as $member)
+                                  <li>
+                                      {{$member->student->name}}
+                                      <button id="btnEditAnggota" type="button" class="btn btn-primary" data-toggle="modal" data-id="{{ $member->id}}" data-name="{{$member->student->name}}" data-nis="{{$member->student->nis}}" data-class="{{$member->student->class}}" data-angkatan="{{$member->angkatan}}" data-status="{{$member->status}}" data-target="#modalEditAnggota">Edit</button>
+                                      <button id="btnDelAnggota" type="button" class="btn btn-primary" data-toggle="modal" data-id="{{ $member->id}}" data-name="{{$member->student->name}}" data-nis="{{$member->student->nis}}" data-class="{{$member->student->class}}" data-angkatan="{{$member->angkatan}}" data-status="{{$member->status}}" data-target="#modalDelAnggota">Delete</button>
+                                  </li>
+                              @endforeach
+                          </ol>
                         </div>
                     </div>
                 @else
@@ -138,7 +152,7 @@
       </div>
       <div class="modal-body">
         
-      <form method="POST" action="{{ route('member.add') }}">
+      <form method="POST" action="{{ route('member.create') }}">
         @csrf
 
         <div class="form-group row">
@@ -210,7 +224,7 @@
       </div>
       <div class="modal-body">
         
-      <form method="POST" action="{{ route('member.edit') }}">
+      <form method="POST" action="{{ route('member.update') }}">
         @csrf
 
         <input id="id" type="hidden" name="id" value="">
@@ -282,7 +296,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Delete Ekstrakurikuler</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Delete Anggota Ekstrakurikuler</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -306,6 +320,270 @@
     </div>
   </div>
 </div>
+
+<!-- Modal Add Prestasi -->
+<div class="modal fade" id="modalAddPrestasi" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Prestasi {{$extracurricular->name}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+      <form method="POST" action="{{ route('achievement.create') }}">
+        @csrf
+        
+        <div class="form-group row">
+            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Nama Prestasi') }}</label>
+
+            <div class="col-md-6">
+                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+
+                @error('name')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="date" class="col-md-4 col-form-label text-md-right">{{ __('Tanggal Penghargaan') }}</label>
+
+            <div class="col-md-6">
+                <input id="date" type="date" class="form-control @error('angkatan') is-invalid @enderror" name="date" value="{{ old('date') }}" required autocomplete="date" autofocus>
+
+                @error('date')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="status" class="col-md-4 col-form-label text-md-right">{{ __('Status') }}</label>
+
+            <div class="col-md-6">
+            
+                <select id="statusPres" name="statusPres" class="form-control">
+                  <option value="Juara 1">Juara 1</option>
+                  <option value="Juara 2">Juara 2</option>
+                  <option value="Juara 3">Juara 3</option>
+                  <option value="Juara Umum">Juara Umum</option>
+                  <option value="Finalis">Finalis</option>
+                  <option value="Lainnya">Lainnya</option>
+                </select>
+
+                @error('status')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+                
+            </div>
+        </div>
+        <div class="form-group row" id="lainnyaInput" style="display:none;">
+            <label for="lainnya" class="col-md-4 col-form-label text-md-right"></label>
+
+            <div class="col-md-6">
+                <input id="lainnya" type="text" class="form-control @error('lainnya') is-invalid @enderror" placeholder="Lainnya..." name="lainnya" value="{{ old('lainnya') }}" autocomplete="lainnya">
+                
+                @error('lainnya')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+                
+            </div>
+        </div>
+
+      <input type="hidden" id="extracurricular_id" name="extracurricular_id" value="{{$extracurricular->id}}">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">{{ __('Add Prestasi') }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Edit Prestasi -->
+<div class="modal fade" id="modalEditPrestasi" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Prestasi {{$extracurricular->name}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <p id="confirm2"></p>
+      <form method="POST" action="{{ route('achievement.update') }}">
+        @csrf
+        
+        <div class="form-group row">
+            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Nama Prestasi') }}</label>
+
+            <div class="col-md-6">
+                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+
+                @error('name')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="date" class="col-md-4 col-form-label text-md-right">{{ __('Tanggal Penghargaan') }}</label>
+
+            <div class="col-md-6">
+                <input id="date" type="date" class="form-control @error('angkatan') is-invalid @enderror" name="date" value="{{ old('date') }}" required autocomplete="date" autofocus>
+
+                @error('date')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="statusPres1" class="col-md-4 col-form-label text-md-right">{{ __('Status') }}</label>
+
+            <div class="col-md-6">
+            
+                <select id="statusPres1" name="statusPres" class="form-control">
+                  <option value="Juara 1">Juara 1</option>
+                  <option value="Juara 2">Juara 2</option>
+                  <option value="Juara 3">Juara 3</option>
+                  <option value="Juara Umum">Juara Umum</option>
+                  <option value="Finalis">Finalis</option>
+                  <option value="Lainnya">Lainnya</option>
+                </select>
+
+                @error('status')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+                
+            </div>
+        </div>
+        <div class="form-group row" id="lainnyaInput" style="display:none;">
+            <label for="lainnya" class="col-md-4 col-form-label text-md-right"></label>
+
+            <div class="col-md-6">
+                <input id="lainnya" type="text" class="form-control @error('lainnya') is-invalid @enderror" placeholder="Lainnya..." name="lainnya" value="{{ old('lainnya') }}" autocomplete="lainnya">
+                
+                @error('lainnya')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+                
+            </div>
+        </div>
+
+      <input type="hidden" id="id" name="id" value="">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">{{ __('Edit Prestasi') }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Delete Prestasi -->
+<div class="modal fade" id="modalDelPrestasi" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete Prestasi Ekstrakurikuler</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure want to delete this Achievement?</p>
+        <p id="name3"></p>
+        <p id="date3"></p>
+        <p id="status3"></p>
+        <p id="confirm3"></p>
+      <form method="POST" action="{{ route('achievement.delete') }}" >
+        @csrf           
+        <input id="id" type="hidden" name="id" value="">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">{{ __('Delete') }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Konfirmasi Prestasi -->
+<div class="modal fade" id="modalKonfirmasiPrestasi" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Konfirmasi Prestasi {{$extracurricular->name}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Data Prestasi Yang Akan Dikonfirmasi:</p>
+        <p id="name4"></p>
+        <p id="date4"></p>
+        <p id="status4"></p>
+      <form method="POST" action="{{ route('achievement.confirm') }}">
+        @csrf
+        
+        <div class="form-group row">
+            <label for="confirm" class="col-md-4 col-form-label text-md-right">{{ __('Konfirmasi') }}</label>
+
+            <div class="col-md-6">
+            
+                <select id="confirm" name="confirm" class="form-control">
+                  <option value="Not Confirmed">Belum Dikonfirmasi</option>
+                  <option value="Confirmed">Sudah Dikonfirmasi</option>
+                </select>
+
+                @error('confirm')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+                
+            </div>
+        </div>
+                
+
+      <input type="hidden" id="id" name="id" value="">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">{{ __('Konfirmasi Prestasi') }}</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 @endsection
 
 @section('scriptplus')
@@ -318,6 +596,15 @@
 				   $.extend(s.options[this.value], $(this).data());
 		    });
 		  }
+      });
+
+      $('#statusPres').on('change',function(){
+        if( $(this).val()==="Lainnya"){
+          $("#lainnyaInput").show()
+        }
+        else{
+          $("#lainnyaInput").hide()
+        }
       });
     });
 
@@ -371,6 +658,73 @@
         else if (status === "Alumni") {
             document.getElementById("status").selectedIndex = 4;
         }
+    })
+
+    $(document).on('click','#btnEditPrestasi', function(){
+        var id = $(this).data('id');
+        var name2 = $(this).data('name');
+        var date2 = $(this).data('date');
+        var confirm2 = $(this).data('confirm');
+        var status2 = $(this).data('status');
+        $(".modal-body #id").val(id);
+        $(".modal-body #name").val(name2);
+        $(".modal-body #date").val(date2);
+        if (confirm2 === "Not Confirmed") {
+          document.getElementById("confirm2").innerHTML = "Prestasi belum dikonfirmasi";
+        }else{
+          document.getElementById("confirm2").innerHTML = "Prestasi sudah dikonfirmasi";
+        }
+        
+        $("#lainnyaInput").hide()
+        if (status2 === "Juara 1") {
+            document.getElementById("statusPres1").selectedIndex = 0;
+        }else if (status2 === "Juara 2") {
+            document.getElementById("statusPres1").selectedIndex = 1;
+        }
+        else if (status2 === "Juara 3") {
+            document.getElementById("statusPres1").selectedIndex = 2;
+        }
+        else if (status2 === "Juara Umum") {
+            document.getElementById("statusPres1").selectedIndex = 3;
+        }
+        else if (status2 === "Finalis") {
+            document.getElementById("statusPres1").selectedIndex = 4;
+        }else{
+            document.getElementById("statusPres1").selectedIndex = 5;
+            $("#lainnyaInput").show()
+            $(".modal-body #lainnya").val(status2);
+        }
+    })
+
+    $(document).on('click','#btnDelPrestasi', function(){
+        var id3 = $(this).data('id');
+        var name3 = $(this).data('name');
+        var confirm3 = $(this).data('confirm');
+        var date3 = $(this).data('date');
+        var status3 = $(this).data('status');
+        $(".modal-body #id").val(id3);
+        document.getElementById("name3").innerHTML = "name : "+name3;
+        document.getElementById("date3").innerHTML = "date : "+date3;
+        document.getElementById("status3").innerHTML = "status : "+status3;
+        document.getElementById("confirm3").innerHTML = "confirm : "+confirm3;
+    });
+
+    $(document).on('click','#btnKonfirmasiPrestasi', function(){
+        var id = $(this).data('id');
+        var name4 = $(this).data('name');
+        var date4 = $(this).data('date');
+        var confirm4 = $(this).data('confirm');
+        var status4 = $(this).data('status');
+        $(".modal-body #id").val(id);
+        document.getElementById("name4").innerHTML = "name : "+name4;
+        document.getElementById("date4").innerHTML = "date : "+date4;
+        document.getElementById("status4").innerHTML = "status : "+status4;
+        if (confirm4 === "Not Confirmed") {
+          document.getElementById("confirm").selectedIndex = 0;
+        }else if (confirm4 === "Confirmed") {
+          document.getElementById("confirm").selectedIndex = 1;
+        }
+
     })
 </script>
 @endsection

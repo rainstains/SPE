@@ -9,6 +9,9 @@ use Redirect;
 use App\Extracurricular;
 use App\Student;
 use App\Member;
+use App\Achievement;
+use App\Activity;
+use DB;
 use Illuminate\Support\Facades\Validator;
 
 class ExtracurricularController extends Controller
@@ -18,6 +21,7 @@ class ExtracurricularController extends Controller
         $this->middleware('auth');
     }
 
+    //Extracurricular
     public function create_ekskul(Request $request){
         $this->validate($request,[
             'name' => 'required',
@@ -93,7 +97,8 @@ class ExtracurricularController extends Controller
         return Redirect::back();
     }
 
-    public function add_member(Request $request){
+    //Member
+    public function create_member(Request $request){
         $this->validate($request,[
             'angkatan' => 'required'
         ]);
@@ -110,7 +115,7 @@ class ExtracurricularController extends Controller
         return Redirect::back();
     }
 
-    public function edit_member(Request $request){
+    public function update_member(Request $request){
         $this->validate($request,[
             'angkatan' => 'required',
             'status' => 'required',
@@ -131,4 +136,96 @@ class ExtracurricularController extends Controller
         return Redirect::back();
     }
 
+    //Achievement
+    public function create_achievement(Request $request){
+        $this->validate($request,[
+            'name' => 'required',
+            'date' => 'required',
+            'extracurricular_id' => 'required',
+        ]);
+
+        if ($request->statusPres == "Lainnya") {
+            $this->validate($request,[
+                'lainnya' => 'required',
+            ]);
+            $status = $request->lainnya;
+        }else{
+            $this->validate($request,[
+                'statusPres' => 'required',
+            ]);
+            $status = $request->statusPres;
+        }
+        
+        $name = strtolower($request->name);
+        $ifExists = Achievement::whereRaw('lower(name) like (?)',["%{$name}%"])->where([['date','=',$request->date],['status','=',$status]])->count();
+        if ($ifExists > 0) {
+            //udah ada
+            return Redirect::back();
+        }else{
+            $achievement = Achievement::create([
+                'name' => $request->name,
+                'date' => $request->date,
+                'status' => $status,
+                'extracurricular_id' => $request->extracurricular_id,
+            ]);
+        }
+        
+        return Redirect::back();
+    }
+
+    public function update_achievement(Request $request){
+        $this->validate($request,[
+            'name' => 'required',
+            'date' => 'required',
+            'id' => 'required',
+        ]);
+
+        if ($request->statusPres == "Lainnya") {
+            $this->validate($request,[
+                'lainnya' => 'required',
+            ]);
+            $statuss = $request->lainnya;
+        }else{
+            $this->validate($request,[
+                'statusPres' => 'required',
+            ]);
+            $status = $request->statusPres;
+        }
+        
+        $name = strtolower($request->name);
+
+        $ifExists = Achievement::whereRaw('lower(name) like (?)',["%{$name}%"])->where([['date','=',$request->date],['status','=',$status]])->count();
+        if ($ifExists > 0) {
+            //udah ada
+            return Redirect::back();
+        }else{
+            $achievement = Achievement::find($request->id);
+            $achievement->name = $request->name;
+            $achievement->date = $request->date;
+            $achievement->status = $status;
+            $achievement->save();
+        }
+        
+        return Redirect::back();
+    }
+
+    public function delete_achievement(Request $request){
+        $this->validate($request,[
+            'id' => 'required',
+        ]);
+        $achievement = Achievement::find($request->id);
+        $achievement->delete();
+        return Redirect::back();
+    }
+
+    public function confirm_achievement(Request $request){
+        $this->validate($request,[
+            'confirm' => 'required',
+            'id' => 'required',
+        ]);
+        $achievement = Achievement::find($request->id);
+        $achievement->confirm = $request->confirm;
+        $achievement->save();
+        return Redirect::back();
+    }
 }

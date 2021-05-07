@@ -7,6 +7,8 @@ use Auth;
 use App\Extracurricular;
 use App\Student;
 use App\Member;
+use App\Achievement;
+use App\Activity;
 
 class HomeController extends Controller
 {
@@ -40,7 +42,8 @@ class HomeController extends Controller
             return view('homepage/homeKesiswaan',compact('extracurriculars','user'));
         }else{
             $members = Member::where('extracurricular_id','=',$extracurricular->id)->orderBy('angkatan','asc')->get(); 
-            return view('homepage/home',compact('extracurricular','user','students', 'members'));
+            $achievements = Achievement::where('extracurricular_id','=',$extracurricular->id)->orderBy('date','asc')->get(); 
+            return view('homepage/home',compact('extracurricular','user','students','members','achievements'));
         }
         
     }

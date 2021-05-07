@@ -11,8 +11,16 @@ class Extracurricular extends Model
         'name','dateEstablished','logo', 'status',
     ];
 
-    public function users(){
+    public function user(){
         return $this->hasMany('App\User');
+    }
+
+    public function achievement(){
+        return $this->hasMany('App\Achievement');
+    }
+
+    public function activity(){
+        return $this->hasMany('App\Activity');
     }
 
     public function student(){

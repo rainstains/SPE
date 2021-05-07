@@ -30,6 +30,14 @@ Route::post('/extracurricular/create','ExtracurricularController@create_ekskul')
 Route::post('/extracurricular/update','ExtracurricularController@update_ekskul')->name('ekskul.update');
 Route::post('/extracurricular/status','ExtracurricularController@update_status_ekskul')->name('ekskul.status');
 Route::post('/extracurricular/delete','ExtracurricularController@delete_ekskul')->name('ekskul.delete');
-Route::post('/extracurricular/add_member','ExtracurricularController@add_member')->name('member.add');
-Route::post('/extracurricular/edit_member','ExtracurricularController@edit_member')->name('member.edit');
+
+//Member
+Route::post('/extracurricular/create_member','ExtracurricularController@add_member')->name('member.create');
+Route::post('/extracurricular/update_member','ExtracurricularController@update_member')->name('member.update');
 Route::post('/extracurricular/delete_member','ExtracurricularController@delete_member')->name('member.delete');
+
+//Achievement
+Route::post('/extracurricular/create_achievement','ExtracurricularController@create_achievement')->name('achievement.create');
+Route::post('/extracurricular/update_achievement','ExtracurricularController@update_achievement')->name('achievement.update');
+Route::post('/extracurricular/delete_achievement','ExtracurricularController@delete_achievement')->name('achievement.delete');
+Route::post('/extracurricular/confirm_achievement','ExtracurricularController@confirm_achievement')->name('achievement.confirm');
