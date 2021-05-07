@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Auth;
 use App\Extracurricular;
 use App\Student;
+use App\Member;
 
 class HomeController extends Controller
 {
@@ -31,13 +32,15 @@ class HomeController extends Controller
         $extracurriculars = Extracurricular::all();
         $extracurricular = Extracurricular::find($user->extracurricular_id);
         
+        
         if($user->role == "ADMIN"){
             return view('homepage/homeAdmin',compact('extracurriculars'));
         }
         else if($user->role == "Kesiswaan"){
             return view('homepage/homeKesiswaan',compact('extracurriculars','user'));
         }else{
-            return view('homepage/home',compact('extracurricular','user','students'));
+            $members = Member::where('extracurricular_id','=',$extracurricular->id)->orderBy('angkatan','asc')->get(); 
+            return view('homepage/home',compact('extracurricular','user','students', 'members'));
         }
         
     }

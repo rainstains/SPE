@@ -30,4 +30,6 @@ Route::post('/extracurricular/create','ExtracurricularController@create_ekskul')
 Route::post('/extracurricular/update','ExtracurricularController@update_ekskul')->name('ekskul.update');
 Route::post('/extracurricular/status','ExtracurricularController@update_status_ekskul')->name('ekskul.status');
 Route::post('/extracurricular/delete','ExtracurricularController@delete_ekskul')->name('ekskul.delete');
-Route::post('/extracurricular/add_anggota','ExtracurricularController@add_anggota')->name('anggota.add');
+Route::post('/extracurricular/add_member','ExtracurricularController@add_member')->name('member.add');
+Route::post('/extracurricular/edit_member','ExtracurricularController@edit_member')->name('member.edit');
+Route::post('/extracurricular/delete_member','ExtracurricularController@delete_member')->name('member.delete');

@@ -8,6 +8,7 @@ use File;
 use Redirect;
 use App\Extracurricular;
 use App\Student;
+use App\Member;
 use Illuminate\Support\Facades\Validator;
 
 class ExtracurricularController extends Controller
@@ -23,6 +24,13 @@ class ExtracurricularController extends Controller
             'dateEstablished' => 'required',
             'logo' => 'required|image|mimes:jpeg,jpg,png,svg',
         ]);
+        
+        $name = strtolower($request->name);
+        $ifExists = Extracurricular::whereRaw('lower(name) like (?)',["%{$name}%"])->count();
+        if ($ifExists > 0) {
+            //udah ada
+            return Redirect::back();
+        }
 
         $extracurricular = Extracurricular::create([
             'name' => $request->name,
@@ -85,16 +93,42 @@ class ExtracurricularController extends Controller
         return Redirect::back();
     }
 
-    public function add_anggota(Request $request){
+    public function add_member(Request $request){
         $this->validate($request,[
             'angkatan' => 'required'
         ]);
-        
-        $extracurricular = Extracurricular::find($request->ekskul_id);
-        $student = Student::find($request->siswa_id);
+    
+        $extracurricular = Extracurricular::find($request->extracurricular_id);
+        $student = Student::find($request->student_id);
+        $member = Member::where([['student_id','=',$request->student_id],['extracurricular_id','=',$request->extracurricular_id]])->count();
+        if ($member > 0) {
+            return Redirect::back();
+        }
 
         $student->extracurricular()->attach($request->extracurricular_id, ['status'=>"Aktif",'angkatan'=>$request->angkatan]);
 
         return Redirect::back();
     }
+
+    public function edit_member(Request $request){
+        $this->validate($request,[
+            'angkatan' => 'required',
+            'status' => 'required',
+        ]);
+
+        $member = Member::find($request->id);
+        $member->angkatan = $request->angkatan;
+        $member->status = $request->status;
+        $member->save();
+
+        return Redirect::back();
+    }
+
+    public function delete_member(Request $request){
+        $member = Member::find($request->id);
+        $member->delete();
+
+        return Redirect::back();
+    }
+
 }

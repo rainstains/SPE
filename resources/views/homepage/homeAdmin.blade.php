@@ -22,7 +22,7 @@
                     <ol>
                     @foreach($extracurriculars as $extracurricular)
                         <li>
-                            {{ $extracurricular->name}} 
+                            {{ $extracurricular->name}}
                             <button id="btnDelEkskul" type="button" class="btn btn-primary" data-toggle="modal" data-id="{{ $extracurricular->id}}" data-name="{{ $extracurricular->name}}" data-target="#modalDelEkskul">Delete</button>
                             <button id="btnStatEkskul" type="button" class="btn btn-primary" data-toggle="modal" data-id="{{ $extracurricular->id}}" data-status="{{ $extracurricular->status}}" data-name="{{ $extracurricular->name}}" data-target="#modalStatEkskul">{{ $extracurricular->status}}</button>
                         </li>

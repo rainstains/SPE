@@ -19,8 +19,8 @@ class CreateExtracurricularStudentTable extends Migration
             $table->string('angkatan');
             $table->BigInteger('extracurricular_id')->unsigned();
             $table->BigInteger('student_id')->unsigned();
-            $table->foreign('extracurricular_id')->references('id')->on('extracurriculars');
-            $table->foreign('student_id')->references('id')->on('students');
+            $table->foreign('extracurricular_id')->references('id')->on('extracurriculars')->onDelete('cascade');
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
         });
     }
 
