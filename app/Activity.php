@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Activity extends Model
 {
     protected $fillable = [
-        'name','date','confirm', 'photo', 'extracurricular_id',
+        'name','desc','date','confirm', 'photo', 'period', 'extracurricular_id',
     ];
 
     public function extracurricular(){

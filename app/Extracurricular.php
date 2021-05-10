@@ -23,6 +23,10 @@ class Extracurricular extends Model
         return $this->hasMany('App\Activity');
     }
 
+    public function report(){
+        return $this->hasMany('App\Report');
+    }
+
     public function student(){
         return $this->belongsToMany('App\Student')->using('App\Member')->withPivot('status','angkatan');
     }

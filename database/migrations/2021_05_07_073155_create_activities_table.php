@@ -16,9 +16,11 @@ class CreateActivitiesTable extends Migration
         Schema::create('activities', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->string('desc')->default('Description');
             $table->Date('date');
-            $table->binary('photo');
-            $table->string('confirm');
+            $table->binary('photo')->nullable();
+            $table->string('confirm')->default('Not Confirmed');
+            $table->string('period')->nullable();
             $table->BigInteger('extracurricular_id')->unsigned();
             $table->foreign('extracurricular_id')->references('id')->on('extracurriculars')->onDelete('cascade');
             $table->timestamps();

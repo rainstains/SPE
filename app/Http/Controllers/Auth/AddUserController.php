@@ -35,7 +35,7 @@ class AddUserController extends Controller
             'role' => $request->role,
             'extracurricular_id' => $extracurricular_id,
         ]);
-        
+
         return Redirect::back();
     }
 

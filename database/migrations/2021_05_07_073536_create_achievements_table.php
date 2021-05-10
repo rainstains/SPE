@@ -19,6 +19,7 @@ class CreateAchievementsTable extends Migration
             $table->Date('date');
             $table->string('status');
             $table->string('confirm')->default('Not Confirmed');
+            $table->string('period')->nullable();
             $table->BigInteger('extracurricular_id')->unsigned();
             $table->foreign('extracurricular_id')->references('id')->on('extracurriculars')->onDelete('cascade');
             $table->timestamps();

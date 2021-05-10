@@ -225,7 +225,144 @@ class ExtracurricularController extends Controller
         ]);
         $achievement = Achievement::find($request->id);
         $achievement->confirm = $request->confirm;
+
+        $period = strtotime($achievement->date);
+        $month = strtoupper(date("F",$period));
+        $year = date("Y",$period);
+        $period = substr($month,0,3).$year;
+
+        $achievement->period = $period;
         $achievement->save();
         return Redirect::back();
+    }
+
+    //Activity
+    public function create_activity(Request $request){
+        $this->validate($request,[
+            'nameAddAct' => 'required',
+            'dateAddAct' => 'required',
+            'extracurricular_id' => 'required',
+        ]);
+
+        $activity = Activity::create([
+            'name' => $request->nameAddAct,
+            'date' => $request->dateAddAct,
+            'extracurricular_id' => $request->extracurricular_id,
+        ]);
+
+        if ($request->descAddAct != null) {
+            $activity->desc = $request->descAddAct;
+            $activity->save();
+        }
+
+        return Redirect::back();
+    }
+
+    public function confirm_activity(Request $request){
+        $this->validate($request,[
+            'confirmAct' => 'required',
+            'id' => 'required',
+        ]);
+        
+        $activity = Activity::find($request->id);
+        $activity->confirm = $request->confirmAct;
+
+        $period = strtotime($activity->date);
+        $month = strtoupper(date("F",$period));
+        $year = date("Y",$period);
+        $period = substr($month,0,3).$year;
+
+        $activity->period = $period;
+        $activity->save();
+        return Redirect::back();
+    }
+
+    public function update_activity(Request $request){
+        $this->validate($request,[
+            'id' => 'required',
+            'nameEditAct' => 'required',
+            'dateEditAct' => 'required',
+        ]);
+
+        if ($request->descEditAct != null) {
+            $desc = $request->descEditAct;
+        }else{
+            $desc = "No Description";
+        }
+
+        $activity = Activity::find($request->id);
+        $activity->name = $request->nameEditAct;
+        $activity->date = $request->dateEditAct;
+        $activity->desc = $desc;
+        $activity->save();
+
+        return Redirect::back();
+    }
+
+    public function delete_activity(Request $request){
+        $this->validate($request,[
+            'id' => 'required'
+        ]);
+
+        $activity = Activity::find($request->id);
+        $activity->delete();
+
+        return Redirect::back();
+    }
+
+    public function update_detail_activity(Request $request){
+        $this->validate($request,[
+            'id' => 'required',
+            'photoEditDetailAct' => 'required|image|mimes:jpeg,jpg,png,svg',
+            'extracurricular_id' => 'required',
+        ]);
+        
+        $activity = Activity::find($request->id);
+        $extracurricular = Extracurricular::find($activity->extracurricular_id);
+
+        if ($activity->photo != null) {
+            File::Delete("uploaded_files"."/"."Extracurricular/".$extracurricular->id."/Activity/photo/".$activity->photo);
+        }else{           
+            $photo = $request->file('photoEditDetailAct');
+            $filename = "PhotoKegiatan_".$activity->id."_".$photo->getClientOriginalName();
+
+            $dir_upload = "uploaded_files"."/"."Extracurricular/".$extracurricular->id."/Activity/photo/";
+            $photo->move($dir_upload, $filename);
+            $activity->photo = $filename;
+        }
+
+        $activity->save();
+        
+        return Redirect::back();
+    }
+
+    //Report belom kepake
+    public function getReportAchievements($id){
+        $extracurricular = Extracurricular::find($id);
+
+        $achievements = Achievement::where([['status', '=','Confirmed'],['extracurricular_id','=',$extracurricular->id]])->orderBy('date','desc')->get();
+        
+        return $achievements;
+    }
+
+    public function getReportActivites($id){
+        $extracurricular = Extracurricular::find($id);
+
+        $activities = Activity::where([['status', '=','Confirmed'],['extracurricular_id','=',$extracurricular->id]])->orderBy('date','desc')->get();
+        
+        return $activities;
+    }
+
+    public function getReportAllAchievements(){
+        
+        $achievements = Achievement::where('status', '=','Confirmed')->orderBy('date','desc')->get();
+        
+        return $achievements;
+    }
+
+    public function getReportAllActivites(){
+        $activities = Activity::where('status', '=','Confirmed')->orderBy('date','desc')->get();
+        
+        return $activities;
     }
 }
