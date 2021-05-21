@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Auth;
+use DB;
 use App\User;
 use App\Extracurricular;
 use App\Student;
@@ -28,14 +29,13 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+
     public function index()
     {
         $user = Auth::user();
-        $students = Student::all();
         $extracurriculars = Extracurricular::all();
         $extracurricular = Extracurricular::find($user->extracurricular_id);
-        
-        
+       
         if($user->role == "ADMIN"){
             return view('homepage/homeAdmin',compact('extracurriculars'));
         }
@@ -46,7 +46,16 @@ class HomeController extends Controller
 
             return view('homepage/homeKesiswaan',compact('extracurriculars','user','achievements', 'activities', 'members'));
         }else{
-            
+           
+            $students = DB::select("
+            SELECT
+                students.* 
+            FROM
+                students
+                LEFT JOIN extracurricular_student ON extracurricular_student.student_id = students.id 
+            WHERE
+                NOT EXISTS ( SELECT * FROM extracurricular_student WHERE extracurricular_student.student_id = students.id AND extracurricular_id LIKE '".$extracurricular->id."' );"
+            );
             $activities = Activity::where('extracurricular_id','=',$extracurricular->id)->orderBy('date','desc')->get(); 
             $members = Member::where('extracurricular_id','=',$extracurricular->id)->orderBy('angkatan','asc')->get(); 
             $activeMember = Member::where([['extracurricular_id','=',$extracurricular->id],['status','=','Aktif']])->count(); 

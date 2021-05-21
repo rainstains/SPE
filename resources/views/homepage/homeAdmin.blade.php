@@ -1,37 +1,44 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Dashboard</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    You are logged in!
-                    <button id="btnAddUser" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAddUser">Add User</button>
-                    <button id="btnAddEkskul" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAddEkskul">Add Ekstrakurikuler</button>
-                    <hr>
-                    <h5>Daftar Ekskul</h5>
-                    <ol>
-                    @foreach($extracurriculars as $extracurricular)
-                        <li>
-                            {{ $extracurricular->name}}
-                            <button id="btnDelEkskul" type="button" class="btn btn-primary" data-toggle="modal" data-id="{{ $extracurricular->id}}" data-name="{{ $extracurricular->name}}" data-target="#modalDelEkskul">Delete</button>
-                            <button id="btnStatEkskul" type="button" class="btn btn-primary" data-toggle="modal" data-id="{{ $extracurricular->id}}" data-status="{{ $extracurricular->status}}" data-name="{{ $extracurricular->name}}" data-target="#modalStatEkskul">{{ $extracurricular->status}}</button>
-                        </li>
-                    @endforeach
-                    </ol>
-                </div>
-            </div>
-        </div>
+<div class="container" >
+  <div class="row ">
+    <div class="col-md-12" style="display: flex; justify-content: flex-end;">
+      <button id="btnAddUser" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAddUser">Add User</button>
+      &nbsp;&nbsp;
+      <button id="btnAddEkskul" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAddEkskul">Add Ekstrakurikuler</button>
     </div>
+  </div>
+  <div class="row" > 
+    <div class="col-md-12"> 
+      <!--
+      @if (session('status'))
+          <div class="alert alert-success" role="alert">
+              {{ session('status') }}
+          </div>
+      @endif
+      -->
+      <h2 class="font-weight-bold" style="color:black;">Ekstrakurikuler</h2>
+    </div>        
+  </div>
+  <div class="row">
+    @foreach($extracurriculars as $extracurricular)
+      <div class="col-md-3 m-0 p-0" >
+        <div class="card bg-secondary text-center my-auto" style="width: 17rem;">
+          <br>
+          <img src="/uploaded_files/Extracurricular/{{$extracurricular->id}}/logo/{{$extracurricular->logo}}" style="text-align:center; margin: 0 auto; width: 200px; height: 200px; "  alt="...">
+          <div class="card-body">
+            <h5 class="card-title" style="color:white;">{{ $extracurricular->name}}</h5>
+            <button id="btnDelEkskul" type="button" class="btn btn-danger" data-toggle="modal" data-id="{{ $extracurricular->id}}" data-name="{{ $extracurricular->name}}" data-target="#modalDelEkskul">Delete</button>
+            &nbsp;&nbsp;
+            <button id="btnStatEkskul" type="button" class="btn btn-info" data-toggle="modal" data-id="{{ $extracurricular->id}}" data-status="{{ $extracurricular->status}}" data-name="{{ $extracurricular->name}}" data-target="#modalStatEkskul">{{ $extracurricular->status}}</button>
+          </div>
+        </div>
+      </div>      
+    @endforeach  
+  </div>
+
+    
 </div>
 
 <!-- Modal Add User-->
@@ -53,7 +60,7 @@
             <label for="firstname" class="col-md-4 col-form-label text-md-right">{{ __('First Name') }}</label>
 
             <div class="col-md-6">
-                <input id="firstname" type="text" class="form-control @error('firstname') is-invalid @enderror" name="firstname" value="{{ old('firstname') }}" required autocomplete="firstname" autofocus>
+                <input id="firstname" type="text" class="form-control @error('firstname') is-invalid @enderror" placeholder="firstname" name="firstname" value="{{ old('firstname') }}" required autocomplete="firstname" autofocus>
 
                 @error('firstname')
                     <span class="invalid-feedback" role="alert">
@@ -66,7 +73,7 @@
             <label for="lastname" class="col-md-4 col-form-label text-md-right">{{ __('Last Name') }}</label>
 
             <div class="col-md-6">
-                <input id="lastname" type="text" class="form-control @error('lastname') is-invalid @enderror" name="lastname" value="{{ old('lastname') }}" required autocomplete="lastname" autofocus>
+                <input id="lastname" type="text" class="form-control @error('lastname') is-invalid @enderror" placeholder="lastname" name="lastname" value="{{ old('lastname') }}" required autocomplete="lastname" autofocus>
 
                 @error('lastname')
                     <span class="invalid-feedback" role="alert">
@@ -80,7 +87,7 @@
             <label for="username" class="col-md-4 col-form-label text-md-right">{{ __('Username') }}</label>
 
             <div class="col-md-6">
-                <input id="username" type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username">
+                <input id="username" type="text" class="form-control @error('username') is-invalid @enderror" placeholder="username" name="username" value="{{ old('username') }}" required autocomplete="username">
 
                 @error('username')
                     <span class="invalid-feedback" role="alert">
@@ -94,7 +101,7 @@
             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
             <div class="col-md-6">
-                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" placeholder="password" name="password" required autocomplete="new-password">
 
                 @error('password')
                     <span class="invalid-feedback" role="alert">
@@ -108,7 +115,7 @@
             <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
 
             <div class="col-md-6">
-                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                <input id="password-confirm" type="password" class="form-control" placeholder="confirm password" name="password_confirmation" required autocomplete="new-password">
             </div>
         </div>
 
@@ -117,10 +124,16 @@
 
             <div class="col-md-6">
                 <select name="role" id="role" required autocomplete="role" class="form-control">
+                    <option value="" disabled selected>Pilih Role</option>
                     <option value="Kesiswaan">Kesiswaan</option>
                     <option value="Pengurus">Pengurus</option>
                     <option value="Pembina">Pembina</option>
                 </select>
+                @error('role')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
             </div>
         </div>
 
@@ -133,12 +146,17 @@
                     <option value="{{ $extracurricular->id }}">{{ $extracurricular->name }}</option>
                     @endforeach
                 </select>
+                @error('extracurricular_id')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
             </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">{{ __('Add User') }}</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success">{{ __('Add User') }}</button>
         </form>
       </div>
     </div>
@@ -164,7 +182,7 @@
           <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Nama Ekstrakurikuler') }}</label>
 
           <div class="col-md-6">
-              <input id="name" type="text" class="form-control @error('namaEkskul') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+              <input id="name" type="text" class="form-control @error('namaEkskul') is-invalid @enderror" placeholder="nama ekstrakurikuler" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
 
               @error('name')
                   <span class="invalid-feedback" role="alert">
@@ -192,7 +210,7 @@
           <label for="logo" class="col-md-4 col-form-label text-md-right">{{ __('Logo') }}</label>
 
           <div class="col-md-6">
-              <input id="logo" type="file" class="form-control @error('logo') is-invalid @enderror" name="logo" value="{{ old('logo') }}" required autocomplete="logo">
+              <input id="logo" type="file" class="form-control-file my-1 @error('logo') is-invalid @enderror" name="logo" value="{{ old('logo') }}" required autocomplete="logo">
 
               @error('logo')
                   <span class="invalid-feedback" role="alert">
@@ -204,8 +222,8 @@
                         
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">{{ __('Add Ekstrakurikuler') }}</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success">{{ __('Add Ekstrakurikuler') }}</button>
         </form>
       </div>
     </div>
@@ -229,8 +247,8 @@
         <input id="id" type="hidden" name="id" value="">
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">{{ __('Delete') }}</button>
+        <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-danger">{{ __('Delete') }}</button>
         </form>
       </div>
     </div>
@@ -252,14 +270,27 @@
       <form method="POST" action="{{ route('ekskul.status') }}" >
         @csrf           
         <input id="id" type="hidden" name="id" value="">
-        <select id="status" name='status' required>
-            <option value="Active">Active</option>
-            <option value="InActive">InActive</option>
-        </select>
+        <div class="form-group row">
+          <label for="logo" class="col-md-4 col-form-label text-md-right">{{ __('Status') }}</label>
+
+          <div class="col-md-6">
+            <select id="status" name='status' required class="form-control" required>
+              <option value="Active">Active</option>
+              <option value="InActive">InActive</option>
+            </select>
+            @error('status')
+              <span class="invalid-feedback" role="alert">
+                  <strong>{{ $message }}</strong>
+              </span>
+            @enderror
+
+          </div>
+        </div>
+        
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">{{ __('Update Status') }}</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success">{{ __('Update Status') }}</button>
         </form>
       </div>
     </div>
@@ -272,7 +303,7 @@
 <script>
 $(document).ready(function () {
     $('#role').on('change',function(){
-        if( $(this).val()==="Kesiswaan"){
+        if( $(this).val()==="Kesiswaan" || $(this).val() === null){
             $("#ekskulinput").hide()
         }
         else{

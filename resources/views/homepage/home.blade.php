@@ -2,100 +2,123 @@
 
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Dashboard</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
+  <div class="row justify-content-center">
+    <div class="col-md-12">
+      <div class="card bg-secondary">
+        <div class="card-body">
+            @if (session('status'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('status') }}
+                </div>
+            @endif
+            @if ($extracurricular->status == "Active")
+            <table width="100%" class="text-white">
+              <tbody>
+                <tr>
+                  <td rowspan="5" style="text-align:center">
+                  <img src="/uploaded_files/Extracurricular/{{$extracurricular->id}}/logo/{{$extracurricular->logo}}" width="200px" height="200px" alt="">
+                  </td>
+                  <td></td>
+                  <td colspan="4" rowspan="2" style="text-align:center;" ><h4 style="font-weight: 700; font-size: 2rem;">{{$extracurricular->name}}</h4></td>
+                </tr>
+                <tr>
+                  <td></td>
+                </tr>
+                <tr style="font-weight: 600; font-size: 1.25rem;">
+                  <td></td>
+                  <td>Tanggal Berdiri</td>
+                  <td>:</td>
+                  <td colspan="2">{{$extracurricular->dateEstablished}}</td>
+                </tr>
+                <tr style="font-weight: 600; font-size: 1.25rem;">
+                  <td></td>
+                  <td>Jumlah Anggota Aktif</td>
+                  <td>:</td>
+                  <td colspan="2">{{$activeMember}}</td>
+                </tr>
+                <tr style="font-weight: 600; font-size: 1.25rem;">
+                  <td></td>
+                  <td>Pembina</td>
+                  <td>:</td>
+                  <td colspan="2">
+                      @foreach($pembinas as $pembina)
+                        @if($loop->last)
+                        {{$pembina->firstname}} {{$pembina->lastname}}
+                        @else
+                        {{$pembina->firstname}} {{$pembina->lastname}},
+                        @endif
+                      @endforeach 
+                  </td>
+                </tr>
+                  <tr>
+                  <td colspan="6">&nbsp;</td>
+                </tr>
+                <tr>
+                  <td colspan="5"></td>
+                  <td style="text-align:right">
+                    @if($user->role != "Kesiswaan")
+                      <button id="btnEditEkskul" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalEditEkskul">Edit Ekstrakurikuler <i class="fas fa-edit"></i></button>
                     @endif
-                    @if ($extracurricular->status == "Active")
-                    <table width="100%">
-                      <tbody>
-                        <tr>
-                          <td rowspan="5" style="text-align:center">
-                          <img src="/uploaded_files/Extracurricular/{{$extracurricular->id}}/logo/{{$extracurricular->logo}}" width="200px" height="200px" alt="">
-                          </td>
-                          <td></td>
-                          <td colspan="4" rowspan="2" style="text-align:center"><h5>{{$extracurricular->name}}</h5></td>
-                        </tr>
-                        <tr>
-                          <td></td>
-                        </tr>
-                        <tr>
-                          <td></td>
-                          <td>Tanggal Berdiri</td>
-                          <td>:</td>
-                          <td colspan="2">{{$extracurricular->dateEstablished}}</td>
-                        </tr>
-                        <tr>
-                          <td></td>
-                          <td>Jumlah Anggota Aktif</td>
-                          <td>:</td>
-                          <td colspan="2">{{$activeMember}}</td>
-                        </tr>
-                        <tr>
-                          <td></td>
-                          <td>Pembina</td>
-                          <td>:</td>
-                          <td colspan="2">
-                              @foreach($pembinas as $pembina)
-                                @if($loop->last)
-                                {{$pembina->firstname}} {{$pembina->lastname}}
-                                @else
-                                {{$pembina->firstname}} {{$pembina->lastname}},
-                                @endif
-                              @endforeach 
-                          </td>
-                        </tr>
-                         <tr>
-                          <td colspan="6">&nbsp;</td>
-                        </tr>
-                        <tr>
-                          <td colspan="5"></td>
-                          <td style="text-align:right">
-                            @if($user->role != "Kesiswaan")
-                              <button id="btnEditEkskul" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalEditEkskul">Edit Ekstrakurikuler</button>
-                            @endif
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
 
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+          @else
+          <p class="text-light">You cannot Access this Ekstrakurikuler page due to InActive Status of {{$extracurricular->name}}</p>
+          @endif
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>
+@if($extracurricular->status == "Active")
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <div class="card bg-secondary">
+                <div class="card-header" style="background-color: #22D6C2;">
+                  <ul class="nav nav-pills" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link active" id="kegiatan-tab" data-toggle="tab" href="#kegiatan" role="tab" aria-controls="home" aria-selected="true">Kegiatan</a>
+                            <a class="nav-link active text-white" style="font-weight: 700; font-size: 1.05em;" id="kegiatan-tab" data-toggle="tab" href="#kegiatan" role="tab" aria-controls="home" aria-selected="true">Kegiatan</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="prestasi-tab" data-toggle="tab" href="#prestasi" role="tab" aria-controls="profile" aria-selected="false">Prestasi</a>
+                            <a class="nav-link text-white" style="font-weight: 700; font-size: 1.05em;" id="prestasi-tab" data-toggle="tab" href="#prestasi" role="tab" aria-controls="profile" aria-selected="false">Prestasi</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="anggota-tab" data-toggle="tab" href="#anggota" role="tab" aria-controls="contact" aria-selected="false">Anggota</a>
+                            <a class="nav-link text-white" style="font-weight: 700; font-size: 1.05em;" id="anggota-tab" data-toggle="tab" href="#anggota" role="tab" aria-controls="contact" aria-selected="false">Anggota</a>
                         </li>
                     </ul>
+                </div>
+
+                <div class="card-body">
+                   
+
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade active show" id="kegiatan" role="tabpanel" aria-labelledby="kegiatan-tab">
-                          @if($user->role == "Pembina")
-                            <button id="btnAddKegiatan" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAddJadwalKegiatan">Add Jadwal Kegiatan</button>
-                          @elseif($user->role == "Kesiswaan")
-                            <button id="btnExportKegiatan" type="button" class="btn btn-primary">Export Data Kegiatan</button>
-                          @endif
-                          <table class="table table-striped">
-                            <thead class="thead-dark">
+                          <div class="col-md-12" style="display: flex; justify-content: flex-end;">
+                            @if($user->role == "Pembina")
+                              <button id="btnAddKegiatan" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAddJadwalKegiatan">Add Jadwal Kegiatan <i class="fas fa-plus"></i></button>
+                            @elseif($user->role == "Kesiswaan")
+                              <button id="btnExportKegiatan" type="button" class="btn btn-primary">Export Data Kegiatan</button>
+                            @endif
+                          </div>
+                          <br>
+                          <table class="table table-secondary" >
+                            <thead class="thead-dark" >
                               <tr>
                                 <th scope="col">No.</th>
                                 <th scope="col">Nama Kegiatan</th>
                                 <th scope="col">Deskripsi</th>
                                 <th scope="col">Tanggal Pelaksanaan</th>
-                                <th scope="col">Dokumentasi Kegiatan</th>
-                                <th scope="col">Action</th>
+                                <th scope="col" style="text-align:center;">Dokumentasi Kegiatan</th>
+                                <th scope="col" style="text-align:center;">Action</th>
                               </tr>
                             </thead>
-                            <tbody>
+                            <tbody style="color:black; background-color:white;">
                               @php ($noKegiatan = 1 ) @endphp
                               @foreach($activities as $activity)
                                 <tr>
@@ -103,20 +126,24 @@
                                   <td>{{$activity->name}}</td>
                                   <td>{{$activity->desc}}</td>
                                   <td>{{date('d F Y', strtotime($activity->date))}}</td>
-                                  <td>
-                                  <button id="btnPhoto" type="button" class="btn btn-primary" data-toggle="modal" data-name="{{$activity->name}}" data-date="{{$activity->date}}" data-photo="{{$activity->photo}}"  data-target="#modalPhoto" >Lihat Photo</button>
+                                  <td style="text-align:center;">
+                                  <button id="btnPhoto" type="button" class="btn btn-info" data-toggle="modal" data-name="{{$activity->name}}" data-date="{{$activity->date}}" data-photo="{{$activity->photo}}"  data-target="#modalPhoto" ><i class="fas fa-eye"></i></button>
                                   </td>
-                                  <td>
+                                  <td style="text-align:center;">
                                   @if($activity->confirm != "Confirmed")
                                     @if($user->role == "Pembina")
-                                      <button id="btnKonfirmasiKegiatan" type="button" class="btn btn-primary" data-toggle="modal" data-id="{{ $activity->id}}" data-name="{{$activity->name}}" data-date="{{$activity->date}}" data-desc="{{$activity->desc}}"  data-photo="{{$activity->photo}}" data-confirm="{{$activity->confirm}}" data-target="#modalKonfirmasiKegiatan" >Konfirmasi</button>
-                                      <button id="btnEditJadwalKegiatan" type="button" class="btn btn-primary" data-toggle="modal" data-id="{{ $activity->id}}" data-name="{{$activity->name}}" data-date="{{$activity->date}}" data-desc="{{$activity->desc}}"  data-photo="{{$activity->photo}}" data-confirm="{{$activity->confirm}}" data-target="#modalEditJadwalKegiatan" >Edit Jadwal</button>
-                                      <button id="btnDelJadwalKegiatan" type="button" class="btn btn-primary" data-toggle="modal" data-id="{{ $activity->id}}" data-name="{{$activity->name}}" data-date="{{$activity->date}}" data-desc="{{$activity->desc}}"  data-photo="{{$activity->photo}}" data-confirm="{{$activity->confirm}}" data-target="#modalDelJadwalKegiatan" >Delete Jadwal</button>
-                                    @elseif($user->role == "Pengurus")
-                                      <button id="btnExportKegiatan" type="button" class="btn btn-primary" >Export</button>
+                                      <button id="btnKonfirmasiKegiatan" type="button" class="btn btn-success" data-toggle="modal" data-id="{{ $activity->id}}" data-name="{{$activity->name}}" data-date="{{$activity->date}}" data-desc="{{$activity->desc}}"  data-photo="{{$activity->photo}}" data-confirm="{{$activity->confirm}}" data-target="#modalKonfirmasiKegiatan" ><i class="fas fa-check"></i></button>
+                                      <button id="btnEditJadwalKegiatan" type="button" class="btn btn-info" data-toggle="modal" data-id="{{ $activity->id}}" data-name="{{$activity->name}}" data-date="{{$activity->date}}" data-desc="{{$activity->desc}}"  data-photo="{{$activity->photo}}" data-confirm="{{$activity->confirm}}" data-target="#modalEditJadwalKegiatan" ><i class="fas fa-edit"></i></button>
+                                      <button id="btnDelJadwalKegiatan" type="button" class="btn btn-danger" data-toggle="modal" data-id="{{ $activity->id}}" data-name="{{$activity->name}}" data-date="{{$activity->date}}" data-desc="{{$activity->desc}}"  data-photo="{{$activity->photo}}" data-confirm="{{$activity->confirm}}" data-target="#modalDelJadwalKegiatan" ><i class="fas fa-trash-alt"></i></button>
                                     @elseif($user->role == "Kesiswaan")
-                                      <button id="btnEditDetailKegiatan" type="button" class="btn btn-primary" data-toggle="modal" data-id="{{ $activity->id}}" data-name="{{$activity->name}}" data-date="{{$activity->date}}" data-desc="{{$activity->desc}}"  data-photo="{{$activity->photo}}" data-confirm="{{$activity->confirm}}" data-target="#modalEditDetailKegiatan" >Edit Detail</button>
+                                      <button id="btnExportKegiatan" type="button" class="btn btn-primary" >Export</button>
+                                    @elseif($user->role == "Pengurus")
+                                      <button id="btnEditDetailKegiatan" type="button" class="btn btn-info" data-toggle="modal" data-id="{{ $activity->id}}" data-name="{{$activity->name}}" data-date="{{$activity->date}}" data-desc="{{$activity->desc}}"  data-photo="{{$activity->photo}}" data-confirm="{{$activity->confirm}}" data-target="#modalEditDetailKegiatan" ><i class="fas fa-edit"></i></button>
+                                    @else
+                                    Not Available.
                                     @endif
+                                  @else
+                                  Confirmed
                                   @endif
                                   </td>
                                 </tr>
@@ -127,11 +154,14 @@
                         </div>
 
                         <div class="tab-pane fade" id="prestasi" role="tabpanel" aria-labelledby="prestasi-tab">
-                          @if($user->role == "Pembina")
-                            <button id="btnAddPrestasi" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAddPrestasi">Add Prestasi</button>
-                          @elseif($user->role == "Kesiswaan")
-                            <button id="btnExportPrestasi" type="button" class="btn btn-primary" >Export Data Prestasi</button>
-                          @endif
+                          <div class="col-md-12" style="display: flex; justify-content: flex-end;">
+                            @if($user->role == "Pembina")
+                              <button id="btnAddPrestasi" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAddPrestasi">Add Prestasi <i class="fas fa-plus"></i></button>
+                            @elseif($user->role == "Kesiswaan")
+                              <button id="btnExportPrestasi" type="button" class="btn btn-primary" >Export Data Prestasi</button>
+                            @endif
+                          </div>
+                          <br>
                           <table class="table table-striped">
                             <thead class="thead-dark">
                               <tr>
@@ -139,10 +169,10 @@
                                 <th scope="col">Nama Prestasi</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Tanggal Penghargaaan</th>
-                                <th scope="col">Action</th>
+                                <th scope="col" style="text-align:center;">Action</th>
                               </tr>
                             </thead>
-                            <tbody>
+                            <tbody style="color:black; background-color:white;">
                             @php ($noPrestasi = 1 ) @endphp
                             @foreach($achievements as $achievement)
                               <tr>
@@ -150,14 +180,18 @@
                                 <td>{{$achievement->name}}</td>
                                 <td>{{$achievement->status}}</td>
                                 <td>{{date('d F Y', strtotime($achievement->date))}}</td>
-                                <td>
+                                <td style="text-align:center;">
                                   @if($achievement->confirm != "Confirmed")
                                     @if($user->role == "Kesiswaan")
-                                      <button id="btnKonfirmasiPrestasi" type="button" class="btn btn-primary" data-toggle="modal" data-id="{{ $achievement->id}}" data-name="{{$achievement->name}}" data-date="{{$achievement->date}}"  data-status="{{$achievement->status}}" data-confirm="{{$achievement->confirm}}" data-target="#modalKonfirmasiPrestasi" >Konfirmasi</button>
+                                      <button id="btnKonfirmasiPrestasi" type="button" class="btn btn-success" data-toggle="modal" data-id="{{ $achievement->id}}" data-name="{{$achievement->name}}" data-date="{{$achievement->date}}"  data-status="{{$achievement->status}}" data-confirm="{{$achievement->confirm}}" data-target="#modalKonfirmasiPrestasi" ><i class="fas fa-check"></i></button>
                                     @elseif($user->role == "Pembina")
-                                      <button id="btnEditPrestasi" type="button" class="btn btn-primary" data-toggle="modal" data-id="{{ $achievement->id}}" data-name="{{$achievement->name}}" data-date="{{$achievement->date}}"  data-status="{{$achievement->status}}" data-confirm="{{$achievement->confirm}}" data-target="#modalEditPrestasi" >Edit</button>
-                                      <button id="btnDelPrestasi" type="button" class="btn btn-primary" data-toggle="modal" data-id="{{ $achievement->id}}" data-name="{{$achievement->name}}"  data-date="{{$achievement->date}}"  data-status="{{$achievement->status}}" data-confirm="{{$achievement->confirm}}" data-target="#modalDelPrestasi">Delete</button>   
+                                      <button id="btnEditPrestasi" type="button" class="btn btn-info" data-toggle="modal" data-id="{{ $achievement->id}}" data-name="{{$achievement->name}}" data-date="{{$achievement->date}}"  data-status="{{$achievement->status}}" data-confirm="{{$achievement->confirm}}" data-target="#modalEditPrestasi" ><i class="fas fa-edit"></i></button>
+                                      <button id="btnDelPrestasi" type="button" class="btn btn-danger" data-toggle="modal" data-id="{{ $achievement->id}}" data-name="{{$achievement->name}}"  data-date="{{$achievement->date}}"  data-status="{{$achievement->status}}" data-confirm="{{$achievement->confirm}}" data-target="#modalDelPrestasi"><i class="fas fa-trash-alt"></i></button>   
+                                    @else
+                                    Not Available.
                                     @endif
+                                  @else
+                                  Confirmed
                                   @endif
                                 </td>
                               </tr>
@@ -168,12 +202,15 @@
                         </div>
                         
                         <div class="tab-pane fade" id="anggota" role="tabpanel" aria-labelledby="anggota-tab">
+                          <div class="col-md-12" style="display: flex; justify-content: flex-end;">
                           @if($user->role == "Pengurus")
-                            <button id="btnAddAnggota" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAddAnggota">Add Anggota</button>
+                            <button id="btnAddAnggota" type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAddAnggota">Add Anggota <i class="fas fa-plus"></i></button>
                           @elseif($user->role == "Kesiswaan")
                             <button id="btnExportAnggota" type="button" class="btn btn-primary">Export Data Anggota</button>
                           @endif
-                          <table class="table table-striped">
+                          </div>
+                          <br>
+                          <table class="table table-striped" >
                             <thead class="thead-dark">
                               <tr>
                                 <th scope="col">No.</th>
@@ -181,10 +218,10 @@
                                 <th scope="col">Kelas</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Angkatan</th>
-                                <th scope="col">Action</th>
+                                <th scope="col" style="text-align:center;">Action</th>
                               </tr>
                             </thead>
-                            <tbody>
+                            <tbody style="color:black; background-color:white;">
                               @php ($noAnggota = 1 ) @endphp
                               @foreach($members as $member)
                                 <tr>
@@ -193,10 +230,12 @@
                                   <td>{{$member->student->class}}</td>
                                   <td>{{$member->status}}</td>
                                   <td>{{$member->angkatan}}</td>
-                                  <td>
+                                  <td style="text-align:center;">
                                   @if($user->role == "Pengurus")
-                                    <button id="btnEditAnggota" type="button" class="btn btn-primary" data-toggle="modal" data-id="{{ $member->id}}" data-name="{{$member->student->name}}" data-nis="{{$member->student->nis}}" data-class="{{$member->student->class}}" data-angkatan="{{$member->angkatan}}" data-status="{{$member->status}}" data-target="#modalEditAnggota">Edit</button>
-                                    <button id="btnDelAnggota" type="button" class="btn btn-primary" data-toggle="modal" data-id="{{ $member->id}}" data-name="{{$member->student->name}}" data-nis="{{$member->student->nis}}" data-class="{{$member->student->class}}" data-angkatan="{{$member->angkatan}}" data-status="{{$member->status}}" data-target="#modalDelAnggota">Delete</button>
+                                    <button id="btnEditAnggota" type="button" class="btn btn-info" data-toggle="modal" data-id="{{ $member->id}}" data-name="{{$member->student->name}}" data-nis="{{$member->student->nis}}" data-class="{{$member->student->class}}" data-angkatan="{{$member->angkatan}}" data-status="{{$member->status}}" data-target="#modalEditAnggota"><i class="fas fa-edit"></i></button>
+                                    <button id="btnDelAnggota" type="button" class="btn btn-danger" data-toggle="modal" data-id="{{ $member->id}}" data-name="{{$member->student->name}}" data-nis="{{$member->student->nis}}" data-class="{{$member->student->class}}" data-angkatan="{{$member->angkatan}}" data-status="{{$member->status}}" data-target="#modalDelAnggota"><i class="fas fa-trash-alt"></i></button>
+                                  @else
+                                    Not Available.
                                   @endif
                                   </td>
                                 </tr>
@@ -207,16 +246,12 @@
                         </div>
 
                     </div>
-                @else
-                <p>You cannot Access this Ekstrakurikuler page due to InActive Status of {{$extracurricular->name}}</p>
-                @endif
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-
+@endif
 
 <!-- Modal Edit Ekskul -->
 <div class="modal fade" id="modalEditEkskul" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -237,7 +272,7 @@
             <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Nama Ekstrakurikuler') }}</label>
 
             <div class="col-md-6">
-                <input id="name" type="text" value="{{$extracurricular->name}}" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                <input id="nameEditEkskul" type="text" value="{{$extracurricular->name}}" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
 
                 @error('name')
                     <span class="invalid-feedback" role="alert">
@@ -251,7 +286,7 @@
             <label for="dateEstablished" class="col-md-4 col-form-label text-md-right">{{ __('Tanggal Berdiri') }}</label>
 
             <div class="col-md-6">
-                <input id="dateEstablished" type="date" value="{{$extracurricular->dateEstablished}}" class="form-control @error('dateEstablished') is-invalid @enderror" name="dateEstablished" value="{{ old('dateEstablished') }}" required autocomplete="dateEstablished">
+                <input id="dateEstablishedEditEkskul" type="date" value="{{$extracurricular->dateEstablished}}" class="form-control @error('dateEstablished') is-invalid @enderror" name="dateEstablished" value="{{ old('dateEstablished') }}" required autocomplete="dateEstablished">
 
                 @error('dateEstablished')
                     <span class="invalid-feedback" role="alert">
@@ -261,11 +296,12 @@
             </div>
         </div>
 
+
         <div class="form-group row">
             <label for="logo" class="col-md-4 col-form-label text-md-right">{{ __('Logo') }}</label>
 
             <div class="col-md-6">
-                <input id="logo" type="file" class="form-control @error('logo') is-invalid @enderror" name="logo" value="{{ old('logo') }}" autocomplete="logo">
+                <input id="logoEditEkskul" type="file" class="form-control-file my-1 @error('logo') is-invalid @enderror" name="logo" value="{{ old('logo') }}" autocomplete="logo">
 
                 @error('logo')
                     <span class="invalid-feedback" role="alert">
@@ -274,11 +310,11 @@
                 @enderror
             </div>
         </div>
-        <input id="id" type="hidden" name="id" value="{{$extracurricular->id}}">
+        <input id="idEditEkskul" type="hidden" name="id" value="{{$extracurricular->id}}">
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">{{ __('Edit Ekstrakurikuler') }}</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success">{{ __('Edit Ekstrakurikuler') }}</button>
         </form>
       </div>
     </div>
@@ -304,41 +340,25 @@
             <label for="student_id" class="col-md-4 col-form-label text-md-right">{{ __('Nama Calon Anggota') }}</label>
 
             <div class="col-md-6">
-                <select name="student_id" id="student_id" placeholder="Cari Siswa ..." required>
-                @foreach($students as $student)
-                <option value="{{ $student->id}}" data-nis="{{$student->nis}}" data-nama="{{$student->name}}" data-kelas="{{$student->class}}"> {{$student->name}} ({{$student->class}})</option>
-                @endforeach
+                <select name="student_id" id="student_id" placeholder="Cari Siswa ..." required class="form-control @error('student_id') is-invalid @enderror">
+                  <option value="" disabled selected>Pilih Calon Anggota</option>
+                  @foreach($students as $student)
+                    <option value="{{ $student->id}}" data-nis="{{$student->nis}}" data-nama="{{$student->name}}" data-kelas="{{$student->class}}"> {{$student->name}} ({{$student->class}})</option>
+                  @endforeach
                 </select>
-            </div>
-            <input id="extracurricular_id" type="hidden" name="extracurricular_id" value="{{$extracurricular->id}}">
-        </div>
-        <h6 style="text-align:center">Detail Data Calon Anggota : </h6>
-        <div class="form-group row">
-            <label for="nis" class="col-md-4 col-form-label text-md-right">No. Induk Siswa</label>
-
-            <div class="col-md-6">
-            <p id="nis"></p>
+                @error('student_id')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
             </div>
         </div>
-        <div class="form-group row">
-            <label for="name" class="col-md-4 col-form-label text-md-right">Nama</label>
-
-            <div class="col-md-6">
-            <p id="nameS"></p>
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="class" class="col-md-4 col-form-label text-md-right">Kelas</label>
-
-            <div class="col-md-6">
-            <p id="class"></p>
-            </div>
-        </div>
+        <input id="extracurricular_id" type="hidden" name="extracurricular_id" value="{{$extracurricular->id}}">
         <div class="form-group row">
             <label for="angkatan" class="col-md-4 col-form-label text-md-right">{{ __('Angkatan') }}</label>
 
             <div class="col-md-6">
-                <input id="angkatan" type="number" class="form-control @error('angkatan') is-invalid @enderror" name="angkatan" value="{{ old('angkatan') }}" required autocomplete="angkatan" autofocus>
+                <input id="angkatanAddAnggota" type="number" class="form-control @error('angkatan') is-invalid @enderror" placeholder="Angkatan" name="angkatan" value="{{ old('angkatan') }}" required autocomplete="angkatan" autofocus>
 
                 @error('angkatan')
                     <span class="invalid-feedback" role="alert">
@@ -347,10 +367,31 @@
                 @enderror
             </div>
         </div>
+        
+        <h6 style="text-align:center">Detail Data Calon Anggota : </h6>
+        <table class="offset-md-2">
+          <tbody>
+            <tr>
+              <td>No. Induk Siswa </td>
+              <td style="padding-left:15px;">&nbsp;:</td>
+              <td id="nis"></td>
+            </tr>
+            <tr>
+              <td>Nama </td>
+              <td style="padding-left:15px;">&nbsp;:</td>
+              <td id="nameS"></td>
+            </tr>
+            <tr>
+              <td>Kelas </td>
+              <td style="padding-left:15px;">&nbsp;:</td>
+              <td id="class"></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">{{ __('Add Anggota') }}</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success">{{ __('Add Anggota') }}</button>
         </form>
       </div>
     </div>
@@ -359,81 +400,82 @@
 
 <!-- Modal Edit Anggota -->
 <div class="modal fade" id="modalEditAnggota" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Edit Anggota {{$extracurricular->name}}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        
-      <form method="POST" action="{{ route('member.update') }}">
-        @csrf
-
-        <input id="id" type="hidden" name="id" value="">
-        <h6 style="text-align:center">Detail Data Anggota : </h6>
-        <div class="form-group row">
-            <label for="nis" class="col-md-4 col-form-label text-md-right">No. Induk Siswa</label>
-
-            <div class="col-md-6">
-            <p id="nis2"></p>
-            </div>
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Anggota {{$extracurricular->name}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-        <div class="form-group row">
-            <label for="name" class="col-md-4 col-form-label text-md-right">Nama</label>
-
-            <div class="col-md-6">
-            <p id="name2"></p>
-            </div>
+        <div class="modal-body">
+          
+        <form method="POST" action="{{ route('member.update') }}">
+          @csrf
+  
+          <input id="idEditAnggota" type="hidden" name="id" value="">
+          <h6 >Detail Data Anggota : </h6>
+          
+          <table>
+            <tbody>
+              <tr>
+                <td>No. Induk Siswa </td>
+                <td style="padding-left:15px;">&nbsp;:</td>
+                <td id="nisEditAnggota"></td>
+              </tr>
+              <tr>
+                <td>Nama </td>
+                <td style="padding-left:15px;">&nbsp;:</td>
+                <td id="nameEditAnggota"></td>
+              </tr>
+              <tr>
+                <td>Kelas </td>
+                <td style="padding-left:15px;">&nbsp;:</td>
+                <td id="classEditAnggota"></td>
+              </tr>
+            </tbody>
+          </table>
+  
+          <br>
+          <div class="form-group row">
+              <label for="angkatan" class="col-md-4 col-form-label text-md-right">{{ __('Angkatan') }}</label>
+  
+              <div class="col-md-6">
+                  <input id="angkatanEditAnggota" type="number" class="form-control @error('angkatan') is-invalid @enderror" name="angkatan" value="{{ old('angkatan') }}" required autocomplete="angkatan" autofocus>
+  
+                  @error('angkatan')
+                      <span class="invalid-feedback" role="alert">
+                          <strong>{{ $message }}</strong>
+                      </span>
+                  @enderror
+              </div>
+          </div>
+          <div class="form-group row">
+              <label for="status" class="col-md-4 col-form-label text-md-right">{{ __('Status') }}</label>
+  
+              <div class="col-md-6">
+                  <select name="status" id="statusEditAnggota" class="form-control" required>
+                      <option value="Aktif">Aktif</option>
+                      <option value="Tidak Aktif">Tidak Aktif</option>
+                      <option value="Pengurus">Pengurus</option>
+                      <option value="Spesial">Spesial</option>
+                      <option value="Alumni">Alumni</option>
+                  </select>
+                  @error('status')
+                      <span class="invalid-feedback" role="alert">
+                          <strong>{{ $message }}</strong>
+                      </span>
+                  @enderror
+              </div>
+          </div>
         </div>
-        <div class="form-group row">
-            <label for="class" class="col-md-4 col-form-label text-md-right">Kelas</label>
-
-            <div class="col-md-6">
-            <p id="class2"></p>
-            </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-success">{{ __('Edit Anggota') }}</button>
+          </form>
         </div>
-        <div class="form-group row">
-            <label for="angkatan" class="col-md-4 col-form-label text-md-right">{{ __('Angkatan') }}</label>
-
-            <div class="col-md-6">
-                <input id="angkatan" type="number" class="form-control @error('angkatan') is-invalid @enderror" name="angkatan" value="{{ old('angkatan') }}" required autocomplete="angkatan" autofocus>
-
-                @error('angkatan')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="status" class="col-md-4 col-form-label text-md-right">{{ __('Status') }}</label>
-
-            <div class="col-md-6">
-                <select name="status" id="status" class="form-control" required>
-                    <option value="Aktif">Aktif</option>
-                    <option value="Tidak Aktif">Tidak Aktif</option>
-                    <option value="Pengurus">Pengurus</option>
-                    <option value="Spesial">Spesial</option>
-                    <option value="Alumni">Alumni</option>
-                </select>
-                @error('status')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">{{ __('Edit Anggota') }}</button>
-        </form>
       </div>
     </div>
-  </div>
 </div>
 
 <!-- Modal Delete Anggota -->
@@ -448,18 +490,43 @@
       </div>
       <div class="modal-body">
         <p>Are you sure want to get this member out from {{$extracurricular->name}}?</p>
-        <p id="nis1"></p>
-        <p id="name1"></p>
-        <p id="class1"></p>
-        <p id="angkatan1"></p>
-        <p id="status1"></p>
+        <table class="">
+          <tbody>
+            <tr>
+              <td>No. Induk Siswa </td>
+              <td style="padding-left:15px;">&nbsp;:</td>
+              <td id="nis1"></td>
+            </tr>
+            <tr>
+              <td>Nama </td>
+              <td style="padding-left:15px;">&nbsp;:</td>
+              <td id="name1"></td>
+            </tr>
+            <tr>
+              <td>Kelas </td>
+              <td style="padding-left:15px;">&nbsp;:</td>
+              <td id="class1"></td>
+            </tr>
+            <tr>
+              <td>Angkatan </td>
+              <td style="padding-left:15px;">&nbsp;:</td>
+              <td id="angkatan1"></td>
+            </tr>
+            <tr>
+              <td>Status </td>
+              <td style="padding-left:15px;">&nbsp;:</td>
+              <td id="status1"></td>
+            </tr>
+          </tbody>
+        </table>
+
       <form method="POST" action="{{ route('member.delete') }}" >
         @csrf           
         <input id="id" type="hidden" name="id" value="">
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">{{ __('Delete') }}</button>
+        <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-danger">{{ __('Delete') }}</button>
         </form>
       </div>
     </div>
@@ -485,7 +552,7 @@
             <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Nama Prestasi') }}</label>
 
             <div class="col-md-6">
-                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" placeholder="Nama Prestasi" value="{{ old('name') }}" required autocomplete="name" autofocus>
 
                 @error('name')
                     <span class="invalid-feedback" role="alert">
@@ -515,6 +582,7 @@
             <div class="col-md-6">
             
                 <select id="statusPres" name="statusPres" class="form-control">
+                  <option value="" disabled selected>Pilih Status Prestasi</option>
                   <option value="Juara 1">Juara 1</option>
                   <option value="Juara 2">Juara 2</option>
                   <option value="Juara 3">Juara 3</option>
@@ -550,8 +618,8 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">{{ __('Add Prestasi') }}</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success">{{ __('Add Prestasi') }}</button>
         </form>
       </div>
     </div>
@@ -569,7 +637,6 @@
         </button>
       </div>
       <div class="modal-body">
-      <p id="confirm2"></p>
       <form method="POST" action="{{ route('achievement.update') }}">
         @csrf
         
@@ -623,11 +690,11 @@
                 
             </div>
         </div>
-        <div class="form-group row" id="lainnyaInput" style="display:none;">
+        <div class="form-group row" id="lainnyaInput1" style="display:none;">
             <label for="lainnya" class="col-md-4 col-form-label text-md-right"></label>
 
             <div class="col-md-6">
-                <input id="lainnya" type="text" class="form-control @error('lainnya') is-invalid @enderror" placeholder="Lainnya..." name="lainnya" value="{{ old('lainnya') }}" autocomplete="lainnya">
+                <input id="lainnya1" type="text" class="form-control @error('lainnya') is-invalid @enderror" placeholder="Lainnya..." name="lainnya" value="{{ old('lainnya') }}" autocomplete="lainnya">
                 
                 @error('lainnya')
                     <span class="invalid-feedback" role="alert">
@@ -642,8 +709,8 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">{{ __('Edit Prestasi') }}</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success">{{ __('Edit Prestasi') }}</button>
         </form>
       </div>
     </div>
@@ -662,17 +729,33 @@
       </div>
       <div class="modal-body">
         <p>Are you sure want to delete this Achievement?</p>
-        <p id="name3"></p>
-        <p id="date3"></p>
-        <p id="status3"></p>
-        <p id="confirm3"></p>
+        <table class="">
+          <tbody>
+            <tr>
+              <td>Nama Prestasi</td>
+              <td style="padding-left:15px;">&nbsp;:</td>
+              <td id="name3"></td>
+            </tr>
+            <tr>
+              <td>Tanggal Penghargaan </td>
+              <td style="padding-left:15px;">&nbsp;:</td>
+              <td id="date3"></td>
+            </tr>
+            <tr>
+              <td>Status Prestasi</td>
+              <td style="padding-left:15px;">&nbsp;:</td>
+              <td id="status3"></td>
+            </tr>
+          </tbody>
+        </table>
+
       <form method="POST" action="{{ route('achievement.delete') }}" >
         @csrf           
         <input id="id" type="hidden" name="id" value="">
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">{{ __('Delete') }}</button>
+        <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-danger">{{ __('Delete') }}</button>
         </form>
       </div>
     </div>
@@ -691,9 +774,26 @@
       </div>
       <div class="modal-body">
         <p>Data Prestasi Yang Akan Dikonfirmasi:</p>
-        <p id="name4"></p>
-        <p id="date4"></p>
-        <p id="status4"></p>
+        <table >
+          <tbody>
+            <tr>
+              <td>Nama Prestasi</td>
+              <td style="padding-left:15px;">&nbsp;:</td>
+              <td id="name4"></td>
+            </tr>
+            <tr>
+              <td>Tanggal Penghargaan </td>
+              <td style="padding-left:15px;">&nbsp;:</td>
+              <td id="date4"></td>
+            </tr>
+            <tr>
+              <td>Status Prestasi </td>
+              <td style="padding-left:15px;">&nbsp;:</td>
+              <td id="status4"></td>
+            </tr>
+          </tbody>
+        </table>
+      <br>
       <form method="POST" action="{{ route('achievement.confirm') }}">
         @csrf
         
@@ -721,8 +821,8 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">{{ __('Konfirmasi Prestasi') }}</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success">{{ __('Konfirmasi Prestasi') }}</button>
         </form>
       </div>
     </div>
@@ -748,7 +848,7 @@
             <label for="nameAddAct" class="col-md-4 col-form-label text-md-right">{{ __('Nama Kegiatan') }}</label>
 
             <div class="col-md-6">
-                <input id="nameAddAct" type="text" class="form-control @error('nameAddAct') is-invalid @enderror" name="nameAddAct" value="{{ old('nameAddAct') }}" required autocomplete="nameAddAct" autofocus>
+                <input id="nameAddAct" type="text" class="form-control @error('nameAddAct') is-invalid @enderror" placeholder="Nama Kegiatan" name="nameAddAct" value="{{ old('nameAddAct') }}" required autocomplete="nameAddAct" autofocus>
 
                 @error('nameAddAct')
                     <span class="invalid-feedback" role="alert">
@@ -776,7 +876,7 @@
             <label for="descAddAct" class="col-md-4 col-form-label text-md-right">{{ __('Deskripsi Kegiatan') }}</label>
 
             <div class="col-md-6">
-                <textarea id="descAddAct" class="form-control @error('descAddAct') is-invalid @enderror" name="descAddAct" value="{{ old('descAddAct') }}" autocomplete="descAddAct" autofocus></textarea>
+                <textarea id="descAddAct" class="form-control @error('descAddAct') is-invalid @enderror" placeholder="Deskripsi" name="descAddAct" value="{{ old('descAddAct') }}" autocomplete="descAddAct" autofocus></textarea>
                 @error('descAddAct')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
@@ -789,8 +889,8 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">{{ __('Add Jadwal Kegiatan') }}</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success">{{ __('Add Jadwal Kegiatan') }}</button>
         </form>
       </div>
     </div>
@@ -809,10 +909,32 @@
       </div>
       <div class="modal-body">
         <p>Data Kegiatan Yang Akan Dikonfirmasi:</p>
-        <p id="nameConfirmAct"></p>
-        <p id="dateConfirmAct"></p>
-        <p id="descConfirmAct"></p>
-        <p id="photoConfirmAct"></p>
+        <table>
+          <tbody>
+            <tr>
+              <td>Nama Kegiatan </td>
+              <td style="padding-left:15px;">&nbsp;:</td>
+              <td id="nameConfirmAct"></td>
+            </tr>
+            <tr>
+              <td>Tanggal Penghargaan </td>
+              <td style="padding-left:15px;">&nbsp;:</td>
+              <td id="dateConfirmAct"></td>
+            </tr>
+            <tr>
+              <td>Deskripsi Kegiatan </td>
+              <td style="padding-left:15px;">&nbsp;:</td>
+              <td id="descConfirmAct"></td>
+            </tr>
+            <tr>
+              <td>Dokumentasi Kegiatan </td>
+              <td style="padding-left:15px;">&nbsp;:</td>
+              <td id="photoConfirmAct"></td>
+            </tr>
+          </tbody>
+        </table>
+        <img id="photoKegiatan4" src="" width="200px" height="200px" alt="" class="rounded mx-auto d-none" >
+      <br>
       <form method="POST" action="{{ route('activity.confirm') }}">
         @csrf
         
@@ -840,8 +962,8 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">{{ __('Konfirmasi Kegiatan') }}</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success">{{ __('Konfirmasi Kegiatan') }}</button>
         </form>
       </div>
     </div>
@@ -859,7 +981,6 @@
         </button>
       </div>
       <div class="modal-body">
-      <p id="confirmEditAct"></p>
       <form method="POST" action="{{ route('activity.update') }}">
         @csrf
         
@@ -908,8 +1029,8 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">{{ __('Edit Jadwal Kegiatan') }}</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success">{{ __('Edit Jadwal Kegiatan') }}</button>
         </form>
       </div>
     </div>
@@ -928,17 +1049,32 @@
       </div>
       <div class="modal-body">
         <p>Are you sure want to delete this Activity?</p>
-        <p id="nameDelAct"></p>
-        <p id="dateDelAct"></p>
-        <p id="descDelAct"></p>
-        <p id="confirmDelAct"></p>
+        <table >
+          <tbody>
+            <tr>
+              <td>Nama Kegiatan </td>
+              <td style="padding-left:15px;">&nbsp;:</td>
+              <td id="nameDelAct"></td>
+            </tr>
+            <tr>
+              <td>Tanggal Penghargaan </td>
+              <td style="padding-left:15px;">&nbsp;:</td>
+              <td id="dateDelAct"></td>
+            </tr>
+            <tr>
+              <td>Deskripsi Kegiatan </td>
+              <td style="padding-left:15px;">&nbsp;:</td>
+              <td id="descDelAct"></td>
+            </tr>
+          </tbody>
+        </table>
       <form method="POST" action="{{ route('activity.delete') }}" >
         @csrf           
         <input id="id" type="hidden" name="id" value="">
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">{{ __('Delete') }}</button>
+        <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-danger">{{ __('Delete') }}</button>
         </form>
       </div>
     </div>
@@ -956,12 +1092,38 @@
         </button>
       </div>
       <div class="modal-body">
-      <p id="confirmEditDetailAct"></p>
-      <p id="nameEditDetailAct"></p>
-      <p id="dateEditDetailAct"></p>
-      <p id="descEditDetailAct"></p>
-      <p id="photoEmpty"></p>
-      <img id="photoKegiatan2" src="" width="200px" height="200px" alt="" style="display:none;">
+      <table>
+        <tbody>
+          <tr>
+            <td>Nama Kegiatan </td>
+            <td>:</td>
+            <td id="nameEditDetailAct"></td>
+          </tr>
+          <tr>
+            <td>Tanggal Pelaksanaan </td>
+            <td>:</td>
+            <td id="dateEditDetailAct"></td>
+          </tr>
+          <tr>
+            <td>Deskripsi </td>
+            <td>:</td>
+            <td id="descEditDetailAct"></td>
+          </tr>
+          <tr>
+            <td>Konfirmasi Kegiatan </td>
+            <td>:</td>
+            <td id="confirmEditDetailAct"></td>
+          </tr>
+          <tr>
+            <td>Dokumentasi Kegiatan </td>
+            <td>:</td>
+            <td id="photoEmpty"></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <img id="photoKegiatan2" src="" width="200px" height="200px" alt="" class="rounded mx-auto d-none" >
+      <br>
       <form method="POST" action="{{ route('activity.updateDetail') }}" enctype="multipart/form-data">
         @csrf
         
@@ -969,7 +1131,7 @@
             <label for="photoEditDetailAct" class="col-md-4 col-form-label text-md-right">{{ __('Photo Kegiatan') }}</label>
 
             <div class="col-md-6">
-                <input id="photoEditDetailAct" type="file" class="form-control @error('photoEditDetailAct') is-invalid @enderror" name="photoEditDetailAct" value="{{ old('photoEditDetailAct') }}" required autocomplete="photoEditDetailAct" autofocus>
+                <input id="photoEditDetailAct" type="file" class="form-control-file my-1 @error('photoEditDetailAct') is-invalid @enderror" name="photoEditDetailAct" value="{{ old('photoEditDetailAct') }}" required autocomplete="photoEditDetailAct" autofocus>
 
                 @error('photoEditDetailAct')
                     <span class="invalid-feedback" role="alert">
@@ -983,8 +1145,8 @@
       <input type="hidden" id="extracurricular_id" name="extracurricular_id" value="{{$extracurricular->id}}">
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">{{ __('Edit Detail Kegiatan') }}</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success">{{ __('Edit Detail Kegiatan') }}</button>
         </form>
       </div>
     </div>
@@ -1017,16 +1179,16 @@
             <tr>
               <td>Dokumentasi Kegiatan</td>
               <td>:</td>
-              <td></td>
+              <td id="dokPhoto"></td>
             </tr>
           </tbody>
         </table>
 
-        <img id="photoKegiatan3" src="" width="400px" height="400px" alt="" class="rounded mx-auto d-block">
+        <img id="photoKegiatan3" src="" width="400px" height="400px" alt="" class="rounded mx-auto d-none" >
         
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -1134,14 +1296,52 @@
           $("#lainnyaInput").hide()
         }
       });
+
+      $('#statusPres1').on('change',function(){
+        if( $(this).val()==="Lainnya"){
+          $("#lainnyaInput1").show()
+        }
+        else{
+          $("#lainnyaInput1").hide()
+        }
+      });
     });
 
     $('#student_id').on('change', function(){
         var s = $('#student_id')[0].selectize; 
         var data = s.options[s.items[0]]; 
-        document.getElementById("nis").innerHTML = ": "+data.nis;
-        document.getElementById("nameS").innerHTML = ": "+data.nama;
-        document.getElementById("class").innerHTML = ": "+data.kelas; 
+        document.getElementById("nis").innerHTML = data.nis;
+        document.getElementById("nameS").innerHTML = data.nama;
+        document.getElementById("class").innerHTML = data.kelas; 
+    });
+
+    $(document).on('click','#btnEditAnggota', function(){
+      var idEditAnggota = $(this).data('id');
+      var nisEditAnggota = $(this).data('nis');
+      var nameEditAnggota = $(this).data('name');
+      var classEditAnggota = $(this).data('class');
+      var angkatanEditAnggota = $(this).data('angkatan');
+      var statusEditAnggota = $(this).data('status');
+      $(".modal-body #idEditAnggota").val(idEditAnggota);
+      $(".modal-body #angkatanEditAnggota").val(angkatanEditAnggota);
+      document.getElementById("nisEditAnggota").innerHTML = nisEditAnggota;
+      document.getElementById("nameEditAnggota").innerHTML = nameEditAnggota;
+      document.getElementById("classEditAnggota").innerHTML = classEditAnggota;
+
+      if (statusEditAnggota === "Aktif") {
+          document.getElementById("statusEditAnggota").selectedIndex = 0;
+      }else if (status === "Tidak Aktif") {
+          document.getElementById("statusEditAnggota").selectedIndex = 1;
+      }
+      else if (status === "Pengurus") {
+          document.getElementById("statusEditAnggota").selectedIndex = 2;
+      }
+      else if (status === "Spesial") {
+          document.getElementById("statusEditAnggota").selectedIndex = 3;
+      }
+      else if (status === "Alumni") {
+          document.getElementById("statusEditAnggota").selectedIndex = 4;
+      }
     });
 
     $(document).on('click','#btnDelAnggota', function(){
@@ -1152,40 +1352,11 @@
         var angkatan = $(this).data('angkatan');
         var status = $(this).data('status');
         $(".modal-body #id").val(id);
-        document.getElementById("nis1").innerHTML = "Nis : "+nis;
-        document.getElementById("name1").innerHTML = "name : "+name;
-        document.getElementById("class1").innerHTML = "class : "+class1;
-        document.getElementById("angkatan1").innerHTML = "angkatan : "+angkatan;
-        document.getElementById("status1").innerHTML = "status : "+status;
-    });
-
-    $(document).on('click','#btnEditAnggota', function(){
-        var id = $(this).data('id');
-        var nis = $(this).data('nis');
-        var name = $(this).data('name');
-        var class1 = $(this).data('class');
-        var angkatan = $(this).data('angkatan');
-        var status = $(this).data('status');
-        $(".modal-body #id").val(id);
-        $(".modal-body #angkatan").val(angkatan);
-        document.getElementById("nis2").innerHTML = ": "+nis;
-        document.getElementById("name2").innerHTML = ": "+name;
-        document.getElementById("class2").innerHTML = ": "+class1;
-
-        if (status === "Aktif") {
-            document.getElementById("status").selectedIndex = 0;
-        }else if (status === "Tidak Aktif") {
-            document.getElementById("status").selectedIndex = 1;
-        }
-        else if (status === "Pengurus") {
-            document.getElementById("status").selectedIndex = 2;
-        }
-        else if (status === "Spesial") {
-            document.getElementById("status").selectedIndex = 3;
-        }
-        else if (status === "Alumni") {
-            document.getElementById("status").selectedIndex = 4;
-        }
+        document.getElementById("nis1").innerHTML = nis;
+        document.getElementById("name1").innerHTML = name;
+        document.getElementById("class1").innerHTML = class1;
+        document.getElementById("angkatan1").innerHTML = angkatan;
+        document.getElementById("status1").innerHTML = status;
     });
 
     $(document).on('click','#btnEditPrestasi', function(){
@@ -1197,13 +1368,8 @@
         $(".modal-body #id").val(id);
         $(".modal-body #name").val(name2);
         $(".modal-body #date").val(date2);
-        if (confirm2 === "Not Confirmed") {
-          document.getElementById("confirm2").innerHTML = "Prestasi belum dikonfirmasi";
-        }else{
-          document.getElementById("confirm2").innerHTML = "Prestasi sudah dikonfirmasi";
-        }
-        
-        $("#lainnyaInput").hide()
+
+        $("#lainnyaInput1").hide()
         if (status2 === "Juara 1") {
             document.getElementById("statusPres1").selectedIndex = 0;
         }else if (status2 === "Juara 2") {
@@ -1219,8 +1385,8 @@
             document.getElementById("statusPres1").selectedIndex = 4;
         }else{
             document.getElementById("statusPres1").selectedIndex = 5;
-            $("#lainnyaInput").show()
-            $(".modal-body #lainnya").val(status2);
+            $("#lainnyaInput1").show()
+            $(".modal-body #lainnya1").val(status2);
         }
     });
 
@@ -1231,10 +1397,10 @@
         var date3 = $(this).data('date');
         var status3 = $(this).data('status');
         $(".modal-body #id").val(id3);
-        document.getElementById("name3").innerHTML = "name : "+name3;
-        document.getElementById("date3").innerHTML = "date : "+date3;
-        document.getElementById("status3").innerHTML = "status : "+status3;
-        document.getElementById("confirm3").innerHTML = "confirm : "+confirm3;
+        document.getElementById("name3").innerHTML = name3;
+        document.getElementById("date3").innerHTML = date3;
+        document.getElementById("status3").innerHTML = status3;
+
     });
 
     $(document).on('click','#btnKonfirmasiPrestasi', function(){
@@ -1244,9 +1410,9 @@
         var confirm4 = $(this).data('confirm');
         var status4 = $(this).data('status');
         $(".modal-body #id").val(id);
-        document.getElementById("name4").innerHTML = "name : "+name4;
-        document.getElementById("date4").innerHTML = "date : "+date4;
-        document.getElementById("status4").innerHTML = "status : "+status4;
+        document.getElementById("name4").innerHTML = name4;
+        document.getElementById("date4").innerHTML = date4;
+        document.getElementById("status4").innerHTML = status4;
         if (confirm4 === "Not Confirmed") {
           document.getElementById("confirm").selectedIndex = 0;
         }else if (confirm4 === "Confirmed") {
@@ -1263,13 +1429,21 @@
         var descConfirmAct = $(this).data('desc');
         var photoConfirmAct = $(this).data('photo');
         $(".modal-body #id").val(id);
-        document.getElementById("nameConfirmAct").innerHTML = "name : "+nameConfirmAct;
-        document.getElementById("dateConfirmAct").innerHTML = "date : "+dateConfirmAct;
-        document.getElementById("descConfirmAct").innerHTML = "desc : "+descConfirmAct;
+        document.getElementById("nameConfirmAct").innerHTML = nameConfirmAct;
+        document.getElementById("dateConfirmAct").innerHTML = dateConfirmAct;
+        document.getElementById("descConfirmAct").innerHTML = descConfirmAct;
         if (confirmAct === "Not Confirmed") {
           document.getElementById("confirmAct").selectedIndex = 0;
         }else if (confirmAct === "Confirmed") {
           document.getElementById("confirmAct").selectedIndex = 1;
+        }
+        if(photoConfirmAct.length === 0) {
+          document.getElementById("photoConfirmAct").innerHTML = "Dokumentasi belum ditambahkan";
+          document.getElementById("photoKegiatan4").className = "rounded mx-auto d-none";
+        }else{
+          document.getElementById("photoConfirmAct").innerHTML = "Dokumentasi sudah ditambahkan";
+          document.getElementById("photoKegiatan4").src = "/uploaded_files/Extracurricular/"+{{$extracurricular->id}}+"/Activity/photo/"+photoConfirmAct;
+          document.getElementById("photoKegiatan4").className = "rounded mx-auto d-block";
         }
     });
 
@@ -1284,11 +1458,6 @@
         $(".modal-body #dateEditAct").val(dateEditAct);
         $(".modal-body #descEditAct").val(descEditAct);
 
-        if (confirmEditAct === "Not Confirmed") {
-          document.getElementById("confirmEditAct").innerHTML = "Prestasi belum dikonfirmasi";
-        }else{
-          document.getElementById("confirmEditAct").innerHTML = "Prestasi sudah dikonfirmasi";
-        }
     });
 
     $(document).on('click','#btnDelJadwalKegiatan', function(){
@@ -1298,10 +1467,10 @@
         var dateDelAct = $(this).data('date');
         var descDelAct = $(this).data('desc');
         $(".modal-body #id").val(id);
-        document.getElementById("nameDelAct").innerHTML = "name : "+nameDelAct;
-        document.getElementById("dateDelAct").innerHTML = "date : "+dateDelAct;
-        document.getElementById("descDelAct").innerHTML = "desc : "+descDelAct;
-        document.getElementById("confirmDelAct").innerHTML = "confirm : "+confirmDelAct;
+        document.getElementById("nameDelAct").innerHTML = nameDelAct;
+        document.getElementById("dateDelAct").innerHTML = dateDelAct;
+        document.getElementById("descDelAct").innerHTML = descDelAct;
+
     });
     
     $(document).on('click','#btnEditDetailKegiatan', function(){
@@ -1313,30 +1482,40 @@
         var descEditDetailAct = $(this).data('desc');
         var photoEditDetailAct = $(this).data('photo');
         $(".modal-body #id").val(id);
-        document.getElementById("nameEditDetailAct").innerHTML = "name : "+nameEditDetailAct;
-        document.getElementById("dateEditDetailAct").innerHTML = "date : "+dateEditDetailAct;
-        document.getElementById("descEditDetailAct").innerHTML = "desc : "+descEditDetailAct;
-        document.getElementById("confirmEditDetailAct").innerHTML = "confirm : "+confirmEditDetailAct;
+        document.getElementById("nameEditDetailAct").innerHTML = nameEditDetailAct;
+        document.getElementById("dateEditDetailAct").innerHTML = dateEditDetailAct;
+        document.getElementById("descEditDetailAct").innerHTML = descEditDetailAct;
+        document.getElementById("confirmEditDetailAct").innerHTML = confirmEditDetailAct;
         
         if (photoEditDetailAct === "") {
           $("#photoKegiatan2").hide();
           document.getElementById("photoEmpty").innerHTML = "Documentation Photo has not been added";
+          document.getElementById("photoKegiatan2").className = "rounded mx-auto d-none";
         }else{
-          document.getElementById("photoEmpty").innerHTML = "Documentation : ";
-          document.getElementById("photoKegiatan2").src = "/uploaded_files/Extracurricular/"+extracurricularId+"/Activity/photo/"+photoEditDetailAct;
           $("#photoKegiatan2").show();
+          document.getElementById("photoEmpty").innerHTML = "";
+          document.getElementById("photoKegiatan2").src = "/uploaded_files/Extracurricular/"+extracurricularId+"/Activity/photo/"+photoEditDetailAct;
+          document.getElementById("photoKegiatan2").className = "rounded mx-auto d-block";          
         }
     });
 
     $(document).on('click','#btnPhoto', function(){
-        var extracurricularId = {{$extracurricular->id}};
         var nameAct = $(this).data('name');
         var photoAct = $(this).data('photo');
         var dateAct = $(this).data('date');
         document.getElementById("PhotoModalLabel").innerHTML = "Dokumentasi Kegiatan "+nameAct;
         document.getElementById("nameAct").innerHTML = nameAct;
         document.getElementById("dateAct").innerHTML = dateAct;
-        document.getElementById("photoKegiatan3").src = "/uploaded_files/Extracurricular/"+extracurricularId+"/Activity/photo/"+photoAct;
+        
+        if(photoAct.length === 0) {
+          document.getElementById("dokPhoto").innerHTML = "Dokumentasi belum ditambahkan";
+          document.getElementById("photoKegiatan3").className = "rounded mx-auto d-none";
+        }else{
+          document.getElementById("dokPhoto").innerHTML = "";
+          document.getElementById("photoKegiatan3").src = "/uploaded_files/Extracurricular/"+{{$extracurricular->id}}+"/Activity/photo/"+photoAct;
+          document.getElementById("photoKegiatan3").className = "rounded mx-auto d-block";
+        }
+        
     });
 
     $(document).on('click','#btnExportKegiatan', function(){

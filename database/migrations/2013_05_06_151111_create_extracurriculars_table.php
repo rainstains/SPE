@@ -15,7 +15,7 @@ class CreateExtracurricularsTable extends Migration
     {
         Schema::create('extracurriculars', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
+            $table->string('name')->unique();
             $table->Date('dateEstablished');
             $table->binary('logo');
             $table->string('status')->default('Active');

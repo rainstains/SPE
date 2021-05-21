@@ -1,39 +1,54 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Dashboard</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    You are logged in! But as a Kesiswaan
-                    <br>
-                    <button id="btnExportKegiatanAll" type="button" class="btn btn-primary">Export Data Kegiatan</button>
-                    <br>
-                    <button id="btnExportPrestasiAll" type="button" class="btn btn-primary">Export Data Prestasi</button>
-                    <br>
-                    <button id="btnExportAnggotaAll" type="button" class="btn btn-primary">Export Data Anggota</button>
-                    <hr>
-                    <ol>
-                    @foreach($extracurriculars as $extracurricular)
-                        <li>
-                            <a href="{{url('/home/kesiswaan',$extracurricular->id)}}">{{$extracurricular->name}}</a>
-                            <p>Status : {{$extracurricular->status}}</p>
-                        </li>
-                    @endforeach
-                    </ol>
-                </div>
-            </div>
-        </div>
+<style>
+.card:hover{
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+}
+</style>
+<div class="container" >
+  <div class="row ">
+    <div class="col-md-12" style="display: flex; justify-content: flex-end;">
+      <button id="btnExportAnggotaAll" type="button" class="btn btn-primary">Export Data Anggota</button>
+      &nbsp;&nbsp;
+      <button id="btnExportPrestasiAll" type="button" class="btn btn-primary">Export Data Prestasi</button>
+      &nbsp;&nbsp;
+      <button id="btnExportKegiatanAll" type="button" class="btn btn-primary">Export Data Kegiatan</button>
     </div>
+  </div>
+  <div class="row" > 
+    <div class="col-md-12"> 
+      <!--
+      @if (session('status'))
+          <div class="alert alert-success" role="alert">
+              {{ session('status') }}
+          </div>
+      @endif
+      -->
+      <h2 class="font-weight-bold" style="color:black;">Ekstrakurikuler</h2>
+    </div>        
+  </div>
+  <div class="row">
+    @foreach($extracurriculars as $extracurricular)
+    
+        <div class="col-md-3 m-0 p-0" >
+            <a href="{{url('/home/kesiswaan',$extracurricular->id)}}">
+                <div class="card bg-secondary text-center my-auto" style="width: 17rem; display: inline-block"">
+                    <br>
+                    <img src="/uploaded_files/Extracurricular/{{$extracurricular->id}}/logo/{{$extracurricular->logo}}" style="text-align:center; margin: 0 auto; width: 200px; height: 200px; "  alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title" style="color:white;">{{ $extracurricular->name}}</h5>
+                        <p style="color:white;">Status : {{$extracurricular->status}}</p>
+                    </div>
+                </div>
+            </a>
+        </div>    
+      
+    @endforeach  
+  </div>
+
+    
 </div>
 
 <div id="allTable" style="display:none;"> >

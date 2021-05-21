@@ -313,7 +313,7 @@ class ExtracurricularController extends Controller
     public function update_detail_activity(Request $request){
         $this->validate($request,[
             'id' => 'required',
-            'photoEditDetailAct' => 'required|image|mimes:jpeg,jpg,png,svg',
+            'photoEditDetailAct' => 'required|mimes:jpg,png,jpeg,svg',
             'extracurricular_id' => 'required',
         ]);
         
@@ -322,15 +322,13 @@ class ExtracurricularController extends Controller
 
         if ($activity->photo != null) {
             File::Delete("uploaded_files"."/"."Extracurricular/".$extracurricular->id."/Activity/photo/".$activity->photo);
-        }else{           
-            $photo = $request->file('photoEditDetailAct');
-            $filename = "PhotoKegiatan_".$activity->id."_".$photo->getClientOriginalName();
+        }        
+        $photo = $request->file('photoEditDetailAct');
+        $filename = "PhotoKegiatan_".$activity->id."_".$photo->getClientOriginalName();
 
-            $dir_upload = "uploaded_files"."/"."Extracurricular/".$extracurricular->id."/Activity/photo/";
-            $photo->move($dir_upload, $filename);
-            $activity->photo = $filename;
-        }
-
+        $dir_upload = "uploaded_files"."/"."Extracurricular/".$extracurricular->id."/Activity/photo/";
+        $photo->move($dir_upload, $filename);
+        $activity->photo = $filename;
         $activity->save();
         
         return Redirect::back();
