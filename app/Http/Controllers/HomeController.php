@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
 use DB;
+use Redirect;
 use App\User;
 use App\Extracurricular;
 use App\Student;
 use App\Member;
 use App\Achievement;
 use App\Activity;
+
 
 class HomeController extends Controller
 {
@@ -68,8 +70,11 @@ class HomeController extends Controller
     }
 
     public function detailKesiswaan($id){
-        $extracurricular = Extracurricular::find($id);
         $user = Auth::user();
+        if($user->role != "Kesiswaan"){
+            return Redirect::route('home');
+        }
+        $extracurricular = Extracurricular::find($id);
         $students = Student::all();
         $activities = Activity::where([['confirm', '=','Confirmed'],['extracurricular_id','=',$extracurricular->id]])->orderBy('date','desc')->get(); 
         $members = Member::where('extracurricular_id','=',$extracurricular->id)->orderBy('angkatan','asc')->get();
